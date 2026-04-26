@@ -1,162 +1,188 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Shield, Zap, BarChart3, Globe } from "lucide-react"
+import { ArrowRight, Zap, Droplet, Flame, Wifi, BarChart3, Lock, TrendingUp, CheckCircle } from "lucide-react"
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-black">
       {/* Navigation */}
-      <nav className="flex items-center justify-between px-6 py-4 border-b border-border/50">
+      <nav className="flex items-center justify-between px-6 md:px-8 py-4 border-b border-border/30 backdrop-blur-sm sticky top-0 z-50">
         <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">Cr</span>
-            </div>
-            <span className="text-xl font-bold text-foreground">Crypto</span>
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-all duration-300">
+            <svg viewBox="0 0 64 64" className="w-10 h-10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="sphereGradientNav" cx="35%" cy="35%">
+                  <stop offset="0%" stopColor="#00D9FF" />
+                  <stop offset="70%" stopColor="#00A8FF" />
+                  <stop offset="100%" stopColor="#0066FF" />
+                </radialGradient>
+                <filter id="neonGlowNav" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                  <feMerge>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <circle cx="32" cy="32" r="28" fill="url(#sphereGradientNav)" opacity="0.12" />
+              <circle cx="32" cy="32" r="26" fill="none" stroke="url(#sphereGradientNav)" strokeWidth="1" opacity="0.25" />
+              <text x="32" y="38" fontSize="18" fontWeight="bold" textAnchor="middle" fill="#00D9FF" opacity="0.9" filter="url(#neonGlowNav)" fontFamily="system-ui">Pg</text>
+            </svg>
+            <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">PagoIA</span>
           </Link>
-          <div className="hidden md:flex items-center gap-6">
-            <Link href="/" className="text-foreground hover:text-primary transition-colors">
-              Inicio
+          <div className="hidden lg:flex items-center gap-8">
+            <Link href="#medios" className="text-foreground hover:text-cyan-400 transition-colors text-sm font-medium">
+              Medios de Pago
             </Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-              Exchange
-            </Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            <Link href="#caracteristicas" className="text-muted-foreground hover:text-cyan-400 transition-colors text-sm font-medium">
               Características
             </Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-              FAQ
-            </Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-              Contacto
+            <Link href="#servicios" className="text-muted-foreground hover:text-cyan-400 transition-colors text-sm font-medium">
+              Servicios
             </Link>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Button asChild variant="default" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6">
-            <Link href="/auth/login">Iniciar Sesión</Link>
+          <Button asChild variant="ghost" className="text-foreground hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg">
+            <Link href="/auth/login">Ingresar</Link>
           </Button>
-          <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full px-6">
-            <Link href="/auth/register">Registrarse</Link>
+          <Button asChild className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-lg px-6 font-semibold">
+            <Link href="/auth/register">Comenzar</Link>
           </Button>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative px-6 py-20 md:py-32 overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="absolute top-20 right-1/4 w-64 h-64 bg-accent/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+      <section className="relative px-6 md:px-8 py-20 md:py-40 overflow-hidden">
+        {/* Gradient backgrounds */}
+        <div className="absolute top-40 right-1/3 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl" />
+        <div className="absolute -bottom-20 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
         
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
-          <div>
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight text-balance">
-              Compra, Vende y Acepta{" "}
-              <span className="text-accent">Criptomonedas</span>{" "}
-              con Facilidad
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="text-center space-y-6 mb-16">
+            <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight">
+              ¿Gestión de Pagos?
+              <br />
+              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent animate-pulse">
+                Tenemos Todo
+              </span>
             </h1>
-            <p className="mt-6 text-lg text-muted-foreground max-w-lg">
-              Una plataforma rápida, segura y fácil de usar para intercambiar Bitcoin, 
-              Ethereum y otros activos digitales. Únete a millones que abrazan el 
-              futuro de las finanzas.
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto font-light">
+              Maximiza tu control, minimiza tus costos y optimiza tus pagos con inteligencia artificial
             </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Button asChild size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-lg px-8 font-semibold text-base h-12">
                 <Link href="/auth/register">
                   Comenzar Ahora
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="rounded-full px-8 border-border text-foreground hover:bg-secondary">
-                <Link href="#features">Saber Más</Link>
+              <Button asChild variant="outline" size="lg" className="rounded-lg px-8 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 font-semibold text-base h-12">
+                <Link href="#caracteristicas">Explorar</Link>
               </Button>
             </div>
           </div>
-          
-          {/* Phone mockup placeholder */}
-          <div className="relative flex justify-center">
-            <div className="w-72 h-[500px] bg-card rounded-3xl border border-border shadow-2xl overflow-hidden">
-              <div className="p-4 border-b border-border">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground">9:41</span>
-                  <div className="flex gap-1">
-                    <div className="w-4 h-2 bg-muted-foreground rounded-sm" />
-                  </div>
-                </div>
-              </div>
-              <div className="p-4">
-                <p className="text-xs text-muted-foreground">Balance</p>
-                <p className="text-2xl font-bold text-foreground">38 500.00</p>
-                <div className="mt-4 h-32 bg-secondary/50 rounded-lg flex items-center justify-center">
-                  <BarChart3 className="w-16 h-16 text-primary/50" />
-                </div>
-                <div className="mt-4 space-y-3">
-                  {["Bitcoin (BTC)", "Ethereum (ETH)", "Tether (USDT)"].map((coin, i) => (
-                    <div key={coin} className="flex items-center justify-between p-2 bg-secondary/30 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center">
-                          <span className="text-xs text-accent">{i + 1}</span>
-                        </div>
-                        <span className="text-sm text-foreground">{coin}</span>
-                      </div>
-                      <Button size="sm" variant="ghost" className="text-primary text-xs">
-                        Comprar
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </div>
+
+          {/* Medios de Pago Section - SOLO TARJETA DE CRÉDITO/DÉBITO */}
+          <div id="medios" className="flex justify-center mt-20 p-8 bg-card/40 border border-cyan-500/20 rounded-2xl backdrop-blur-sm">
+            <div className="p-6 rounded-xl bg-gradient-to-br from-blue-500/30 to-cyan-500/30 border border-white/10 flex flex-col items-center gap-3 hover:border-cyan-500/50 transition-all cursor-pointer group w-full md:w-80">
+              <span className="text-4xl group-hover:scale-110 transition-transform">💳</span>
+              <span className="text-base md:text-lg text-center font-bold text-white">Tarjeta de Crédito / Débito</span>
+              <span className="text-sm text-white/80 text-center">Visa, MasterCard - Pago Inmediato en Tiempo Real</span>
             </div>
-            {/* Decorative elements */}
-            <div className="absolute -bottom-10 -left-10 w-20 h-20 bg-primary/30 rounded-lg rotate-12" />
-            <div className="absolute top-10 -right-5 w-16 h-16 bg-accent/30 rounded-full" />
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="px-6 py-20 bg-card/50">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-4">
-            ¿Por qué elegirnos?
-          </h2>
-          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Ofrecemos las mejores herramientas y características para que tu experiencia 
-            con criptomonedas sea segura y eficiente.
-          </p>
+      {/* Características Section */}
+      <section id="caracteristicas" className="px-6 md:px-8 py-20 border-t border-cyan-500/20">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Potencia tu Gestión Financiera
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Suite completa de herramientas para optimizar y automatizar tus pagos
+            </p>
+          </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                icon: Shield,
-                title: "Seguridad Avanzada",
-                description: "Protección de nivel bancario para tus activos digitales"
+                icon: TrendingUp,
+                title: "Análisis Inteligente",
+                description: "Recibe insights de IA sobre tus gastos y predicciones precisas para optimizar tu presupuesto."
               },
               {
-                icon: Zap,
-                title: "Transacciones Rápidas",
-                description: "Ejecuta operaciones en milisegundos con nuestra tecnología"
+                icon: Lock,
+                title: "Seguridad Bancaria",
+                description: "Encriptación de nivel empresarial protege todos tus datos financieros y personales."
+              },
+              {
+                icon: CheckCircle,
+                title: "Automatización Total",
+                description: "Programa pagos recurrentes, recibe recordatorios y evita pagos atrasados automáticamente."
               },
               {
                 icon: BarChart3,
-                title: "Análisis en Tiempo Real",
-                description: "Gráficos y métricas actualizadas al instante"
+                title: "Reportes Detallados",
+                description: "Exporta análisis completos en PDF y Excel para auditorías y seguimiento financiero."
               },
               {
-                icon: Globe,
-                title: "Acceso Global",
-                description: "Opera desde cualquier lugar del mundo, 24/7"
+                icon: Zap,
+                title: "Integración Multi-Servicio",
+                description: "Conecta todos tus servicios: agua, luz, gas, internet, telefoía y más en un solo panel."
+              },
+              {
+                icon: Wifi,
+                title: "Soporte 24/7 con IA",
+                description: "Chat inteligente disponible todo el tiempo para resolver tus dudas al instante."
               }
-            ].map((feature) => (
+            ].map((feature, i) => (
               <div 
-                key={feature.title}
-                className="p-6 bg-card rounded-xl border border-border hover:border-primary/50 transition-colors"
+                key={i} 
+                className="p-6 rounded-xl border border-cyan-500/20 bg-gradient-to-br from-card to-card/50 hover:border-cyan-500/50 hover:from-cyan-500/10 transition-all group"
               >
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-primary" />
+                <div className="mb-4 w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <feature.icon className="w-6 h-6 text-cyan-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground text-sm">{feature.description}</p>
+                <h3 className="text-lg font-bold text-foreground mb-2">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Servicios Section */}
+      <section id="servicios" className="px-6 md:px-8 py-20 border-t border-cyan-500/20">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Servicios Mexicanos Principales
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Gestiona fácilmente tus pagos a los principales proveedores de servicios en México
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { name: "CFE", service: "Electricidad", icon: "⚡", color: "from-yellow-500/20 to-amber-500/20" },
+              { name: "CONAGUA", service: "Agua Potable", icon: "💧", color: "from-blue-500/20 to-cyan-500/20" },
+              { name: "PEMEX Gas", service: "Gas Natural", icon: "🔥", color: "from-red-500/20 to-orange-500/20" },
+              { name: "TELMEX", service: "Telefonía/Internet", icon: "📡", color: "from-purple-500/20 to-pink-500/20" },
+            ].map((provider, i) => (
+              <div 
+                key={i}
+                className={`p-6 rounded-xl border border-white/10 bg-gradient-to-br ${provider.color} hover:border-cyan-500/30 transition-all group cursor-pointer`}
+              >
+                <div className="text-4xl mb-4">{provider.icon}</div>
+                <h3 className="text-xl font-bold text-foreground mb-1">{provider.name}</h3>
+                <p className="text-sm text-muted-foreground mb-4">{provider.service}</p>
+                <Button asChild size="sm" className="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded-lg border border-cyan-500/30 h-8 text-xs">
+                  <Link href="/auth/register">Comenzar</Link>
+                </Button>
               </div>
             ))}
           </div>
@@ -164,35 +190,52 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="px-6 py-20">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Comienza tu viaje cripto hoy
+      <section className="px-6 md:px-8 py-20 border-t border-cyan-500/20">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+            ¿Listo para optimizar tus pagos?
           </h2>
-          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Regístrate en minutos y obtén acceso a todas nuestras herramientas de trading.
+          <p className="text-xl text-muted-foreground">
+            Únete a miles de usuarios que ya confían en PagoIA para gestionar sus servicios
           </p>
-          <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full px-10">
-            <Link href="/auth/register">
-              Descargar Ahora
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-lg px-8 font-semibold text-base h-12">
+              <Link href="/auth/register">
+                Registrarme Gratis
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="rounded-lg px-8 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 font-semibold text-base h-12">
+              <Link href="/auth/login">Ya tengo cuenta</Link>
+            </Button>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="px-6 py-8 border-t border-border">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">Cr</span>
+      <footer className="border-t border-cyan-500/20 px-6 md:px-8 py-12 bg-black/50">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <svg viewBox="0 0 64 64" className="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <radialGradient id="sphereGradientFooter" cx="35%" cy="35%">
+                      <stop offset="0%" stopColor="#00D9FF" />
+                      <stop offset="100%" stopColor="#0066FF" />
+                    </radialGradient>
+                  </defs>
+                  <circle cx="32" cy="32" r="28" fill="url(#sphereGradientFooter)" opacity="0.15" />
+                  <text x="32" y="38" fontSize="14" fontWeight="bold" textAnchor="middle" fill="#00D9FF" fontFamily="system-ui">Pg</text>
+                </svg>
+                <span className="font-bold text-cyan-400">PagoIA</span>
+              </div>
+              <p className="text-sm text-muted-foreground">Gestión inteligente de pagos con IA</p>
             </div>
-            <span className="font-bold text-foreground">Crypto</span>
           </div>
-          <p className="text-sm text-muted-foreground">
-            © 2026 Crypto. Todos los derechos reservados.
-          </p>
+          <div className="border-t border-cyan-500/10 pt-8 text-center text-sm text-muted-foreground">
+            <p>&copy; 2026 PagoIA. Todos los derechos reservados.</p>
+          </div>
         </div>
       </footer>
     </div>

@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
+import { createClient, isSupabaseClientConfigured } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -34,6 +35,11 @@ export default function RegisterPage() {
 
     if (password.length < 6) {
       setError("La contraseña debe tener al menos 6 caracteres")
+      return
+    }
+
+    if (!isSupabaseClientConfigured()) {
+      setError("El registro quedará disponible cuando se complete la configuración pendiente.")
       return
     }
 
@@ -69,6 +75,12 @@ export default function RegisterPage() {
 
   const handleGoogleSignUp = async () => {
     setError(null)
+
+    if (!isSupabaseClientConfigured()) {
+      setError("El registro con Google quedará disponible cuando se complete la configuración pendiente.")
+      return
+    }
+
     setGoogleLoading(true)
 
     const supabase = createClient()
@@ -124,11 +136,47 @@ export default function RegisterPage() {
 
       <Card className="w-full max-w-md bg-card border-border relative z-10">
         <CardHeader className="text-center">
-          <Link href="/" className="flex items-center justify-center gap-2 mb-4">
-            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">Cr</span>
-            </div>
-            <span className="text-xl font-bold text-foreground">Crypto</span>
+          <Link href="/" className="flex items-center justify-center gap-2 mb-4 hover:opacity-80 transition-all duration-300">
+            <svg viewBox="0 0 64 64" className="w-12 h-12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="sphereGradient4" cx="35%" cy="35%">
+                  <stop offset="0%" stopColor="#00D9FF" />
+                  <stop offset="70%" stopColor="#00A8FF" />
+                  <stop offset="100%" stopColor="#0066FF" />
+                </radialGradient>
+                <filter id="neonGlow4" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                  <feMerge>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <filter id="strongGlow4" x="-100%" y="-100%" width="300%" height="300%">
+                  <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
+                  <feMerge>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <circle cx="32" cy="32" r="28" fill="url(#sphereGradient4)" opacity="0.12" />
+              <circle cx="32" cy="32" r="26" fill="none" stroke="url(#sphereGradient4)" strokeWidth="1" opacity="0.25" />
+              <circle cx="32" cy="32" r="24" fill="none" stroke="#00FF88" strokeWidth="0.8" opacity="0.15" strokeDasharray="3,2" />
+              <text x="32" y="38" fontSize="18" fontWeight="bold" textAnchor="middle" fill="#00D9FF" opacity="0.9" filter="url(#strongGlow4)" fontFamily="system-ui, -apple-system, sans-serif">Pg</text>
+              <circle cx="32" cy="18" r="1.8" fill="#00FF88" filter="url(#neonGlow4)" />
+              <circle cx="42" cy="22" r="1.6" fill="#00D9FF" filter="url(#neonGlow4)" />
+              <circle cx="48" cy="30" r="1.5" fill="#00FF88" filter="url(#neonGlow4)" />
+              <circle cx="16" cy="30" r="1.5" fill="#00FF88" filter="url(#neonGlow4)" />
+              <circle cx="22" cy="46" r="1.6" fill="#00D9FF" filter="url(#neonGlow4)" />
+              <circle cx="42" cy="46" r="1.6" fill="#00D9FF" filter="url(#neonGlow4)" />
+              <line x1="32" y1="18" x2="42" y2="22" stroke="#00D9FF" strokeWidth="0.8" opacity="0.4" />
+              <line x1="42" y1="22" x2="48" y2="30" stroke="#00FF88" strokeWidth="0.8" opacity="0.4" />
+              <line x1="48" y1="30" x2="42" y2="46" stroke="#00D9FF" strokeWidth="0.8" opacity="0.4" />
+              <line x1="42" y1="46" x2="22" y2="46" stroke="#00FF88" strokeWidth="0.8" opacity="0.4" />
+              <line x1="22" y1="46" x2="16" y2="30" stroke="#00D9FF" strokeWidth="0.8" opacity="0.4" />
+              <line x1="16" y1="30" x2="32" y2="18" stroke="#00FF88" strokeWidth="0.8" opacity="0.4" />
+            </svg>
+            <span className="text-xl font-bold text-foreground">PagoIA</span>
           </Link>
           <CardTitle className="text-2xl text-foreground">Crear Cuenta</CardTitle>
           <CardDescription className="text-muted-foreground">

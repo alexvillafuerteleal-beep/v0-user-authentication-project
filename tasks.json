@@ -1,0 +1,434 @@
+{
+  "project": {
+    "name": "PagoIA",
+    "version": "v3.0",
+    "lastUpdated": "2026-03-30",
+    "status": "65% Completado",
+    "totalTasks": 47,
+    "totalHours": 139,
+    "summary": "Sistema de pagos multimétodo con IA, webhooks Stripe, dashboard analytics"
+  },
+  "tasks": {
+    "critical": [
+      {
+        "id": 1,
+        "title": "Deploy a Vercel",
+        "description": "Subir proyecto a Vercel con variables de producción",
+        "hours": 1.5,
+        "complexity": "LOW",
+        "priority": "P0",
+        "status": "TODO",
+        "dependencies": [],
+        "subtasks": [
+          "Conectar GitHub repo",
+          "Configurar variables de entorno",
+          "Setup dominio",
+          "Webhooks Stripe"
+        ],
+        "tags": ["deployment", "devops", "critical"]
+      },
+      {
+        "id": 2,
+        "title": "Production Config (.env.prod)",
+        "description": "Variables de entorno para producción",
+        "hours": 1,
+        "complexity": "LOW",
+        "priority": "P0",
+        "status": "TODO",
+        "dependencies": [],
+        "subtasks": [
+          "Supabase prod keys",
+          "Stripe prod keys",
+          "SendGrid config",
+          "Redis config"
+        ],
+        "tags": ["config", "security", "critical"]
+      },
+      {
+        "id": 3,
+        "title": "Jest Testing Setup",
+        "description": "Configurar framework testing",
+        "hours": 2,
+        "complexity": "MEDIUM",
+        "priority": "P0",
+        "status": "TODO",
+        "dependencies": [],
+        "subtasks": [
+          "Install dependencies",
+          "jest.config.ts",
+          "First test",
+          "CI integration"
+        ],
+        "tags": ["testing", "ci/cd", "critical"]
+      },
+      {
+        "id": 4,
+        "title": "Email SendGrid Integration",
+        "description": "Sistema de emails para alertas y notificaciones",
+        "hours": 4,
+        "complexity": "MEDIUM",
+        "priority": "P0",
+        "status": "TODO",
+        "dependencies": [2],
+        "subtasks": [
+          "SendGrid account setup",
+          "API key",
+          "Email service lib",
+          "Templates",
+          "Test email flow"
+        ],
+        "tags": ["backend", "email", "critical"]
+      },
+      {
+        "id": 5,
+        "title": "Rate Limiting & Security Headers",
+        "description": "Proteger APIs contra abuso y ataques",
+        "hours": 5,
+        "complexity": "HIGH",
+        "priority": "P0",
+        "status": "TODO",
+        "dependencies": [],
+        "subtasks": [
+          "Upstash integration",
+          "Rate limit middleware",
+          "Security headers (CSP, X-Frame-Options)",
+          "CORS config",
+          "CSRF protection",
+          "Input validation"
+        ],
+        "tags": ["security", "backend", "critical"]
+      },
+      {
+        "id": 6,
+        "title": "Swagger/OpenAPI Documentation",
+        "description": "Documentar todos los endpoints API",
+        "hours": 3,
+        "complexity": "LOW",
+        "priority": "P0",
+        "status": "TODO",
+        "dependencies": [],
+        "subtasks": [
+          "swagger-ui-react setup",
+          "Document endpoints",
+          "Error codes",
+          "Rate limits",
+          "Generate schema"
+        ],
+        "tags": ["documentation", "api", "critical"]
+      }
+    ],
+    "important": [
+      {
+        "id": 7,
+        "title": "Tests E2E (Playwright)",
+        "description": "Testing end-to-end de flujos completos",
+        "hours": 6,
+        "complexity": "MEDIUM",
+        "priority": "P1",
+        "status": "TODO",
+        "dependencies": [3],
+        "subtasks": [
+          "Playwright setup",
+          "Login flow test",
+          "Payment flow tests",
+          "Dashboard navigation",
+          "Chat interaction"
+        ],
+        "tags": ["testing", "qa", "important"]
+      },
+      {
+        "id": 8,
+        "title": "Redis Cache Implementation",
+        "description": "Implementar caché Redis para queries frequentes",
+        "hours": 4,
+        "complexity": "MEDIUM",
+        "priority": "P1",
+        "status": "TODO",
+        "dependencies": [2],
+        "subtasks": [
+          "Upstash Redis setup",
+          "Cache middleware",
+          "Payment cache (5min TTL)",
+          "User cache (10min TTL)"
+        ],
+        "tags": ["backend", "performance", "important"]
+      },
+      {
+        "id": 9,
+        "title": "API Reportes & Analytics",
+        "description": "Endpoints para reportes y gráficos",
+        "hours": 5,
+        "complexity": "MEDIUM",
+        "priority": "P1",
+        "status": "TODO",
+        "dependencies": [8],
+        "subtasks": [
+          "Monthly summary endpoint",
+          "Payment methods stats",
+          "Revenue reports",
+          "Top services",
+          "User behavior"
+        ],
+        "tags": ["backend", "analytics", "important"]
+      },
+      {
+        "id": 10,
+        "title": "Unit Tests - Core Functions",
+        "description": "Tests unitarios para funciones críticas",
+        "hours": 4,
+        "complexity": "MEDIUM",
+        "priority": "P1",
+        "status": "TODO",
+        "dependencies": [3],
+        "subtasks": [
+          "Test utils.ts",
+          "Test auth functions",
+          "Test payment logic",
+          "70% coverage target"
+        ],
+        "tags": ["testing", "important"]
+      },
+      {
+        "id": 11,
+        "title": "Página Métodos de Pago",
+        "description": "Crear página informativa sobre métodos de pago",
+        "hours": 4,
+        "complexity": "MEDIUM",
+        "priority": "P1",
+        "status": "TODO",
+        "dependencies": [],
+        "subtasks": [
+          "Create /payment-methods page",
+          "Método explanations",
+          "Comparativo table",
+          "FAQ section",
+          "Contact form"
+        ],
+        "tags": ["frontend", "content", "important"]
+      },
+      {
+        "id": 12,
+        "title": "Sistema de Reembolsos",
+        "description": "Implementar reembolsos (refunds)",
+        "hours": 3,
+        "complexity": "MEDIUM",
+        "priority": "P1",
+        "status": "TODO",
+        "dependencies": [4],
+        "subtasks": [
+          "Refund API endpoint",
+          "Database table",
+          "Stripe refund logic",
+          "Webhook handling"
+        ],
+        "tags": ["backend", "payments", "important"]
+      },
+      {
+        "id": 13,
+        "title": "Performance Optimization",
+        "description": "Mejorar velocidad y Core Web Vitals",
+        "hours": 4,
+        "complexity": "MEDIUM",
+        "priority": "P1",
+        "status": "TODO",
+        "dependencies": [],
+        "subtasks": [
+          "Image optimization",
+          "Code splitting",
+          "Bundle analysis",
+          "Query optimization",
+          "CDN setup"
+        ],
+        "tags": ["frontend", "performance", "important"]
+      }
+    ],
+    "normal": [
+      {
+        "id": 20,
+        "title": "Google OAuth Completado",
+        "description": "Login con Google end-to-end",
+        "hours": 2.5,
+        "complexity": "MEDIUM",
+        "priority": "P2",
+        "status": "TODO",
+        "dependencies": [],
+        "subtasks": [
+          "Google Cloud setup",
+          "Supabase provider",
+          "Redirect URLs",
+          "Testing"
+        ],
+        "tags": ["auth", "oauth", "normal"]
+      },
+      {
+        "id": 24,
+        "title": "Suscripciones Stripe",
+        "description": "Modelo de suscripción recurrente",
+        "hours": 8,
+        "complexity": "HIGH",
+        "priority": "P2",
+        "status": "TODO",
+        "dependencies": [4],
+        "subtasks": [
+          "Stripe products crear",
+          "Subscription endpoints",
+          "Cancel flow",
+          "Webhook updates",
+          "Dashboard UI"
+        ],
+        "tags": ["backend", "payments", "normal"]
+      },
+      {
+        "id": 27,
+        "title": "Elasticsearch Integration",
+        "description": "Búsqueda rápida y filtros avanzados",
+        "hours": 5,
+        "complexity": "HIGH",
+        "priority": "P2",
+        "status": "TODO",
+        "dependencies": [],
+        "subtasks": [
+          "Elasticsearch setup",
+          "Indexing logic",
+          "Search API",
+          "Filtering"
+        ],
+        "tags": ["backend", "search", "normal"]
+      },
+      {
+        "id": 34,
+        "title": "Multi-idioma (i18n)",
+        "description": "Soporte para es/en/pt",
+        "hours": 4,
+        "complexity": "MEDIUM",
+        "priority": "P2",
+        "status": "TODO",
+        "dependencies": [],
+        "subtasks": [
+          "next-intl setup",
+          "Spanish translations",
+          "English translations",
+          "Portuguese translations",
+          "Locale switching"
+        ],
+        "tags": ["frontend", "i18n", "normal"]
+      }
+    ],
+    "optional": [
+      {
+        "id": 43,
+        "title": "Docker Containerization",
+        "description": "Crear Dockerfile y docker-compose",
+        "hours": 3,
+        "complexity": "MEDIUM",
+        "priority": "P3",
+        "status": "TODO",
+        "dependencies": [1],
+        "subtasks": [
+          "Dockerfile",
+          "docker-compose.yml",
+          "Testing"
+        ],
+        "tags": ["devops", "docker", "optional"]
+      },
+      {
+        "id": 44,
+        "title": "CI/CD Pipeline (GitHub Actions)",
+        "description": "Automatizar testing y deployment",
+        "hours": 3,
+        "complexity": "MEDIUM",
+        "priority": "P3",
+        "status": "TODO",
+        "dependencies": [3],
+        "subtasks": [
+          "GitHub Actions workflow",
+          "Auto-test on PR",
+          "Auto-deploy on merge",
+          "Slack notifications"
+        ],
+        "tags": ["devops", "ci/cd", "optional"]
+      },
+      {
+        "id": 45,
+        "title": "Monitoring & Logging (Sentry + DataDog)",
+        "description": "Monitoreo de errores y performance",
+        "hours": 3,
+        "complexity": "MEDIUM",
+        "priority": "P3",
+        "status": "TODO",
+        "dependencies": [1],
+        "subtasks": [
+          "Sentry integration",
+          "DataDog APM",
+          "CloudWatch logs",
+          "Alerts setup"
+        ],
+        "tags": ["devops", "monitoring", "optional"]
+      }
+    ]
+  },
+  "timeline": {
+    "week1": {
+      "focus": "MVP Production Ready",
+      "tasks": [1, 2, 3, 4, 5, 6],
+      "hours": 16.5,
+      "status": "PLANNED"
+    },
+    "week2_3": {
+      "focus": "Core Features Complete",
+      "tasks": [7, 8, 9, 10, 11, 12, 13],
+      "hours": 30,
+      "status": "PLANNED"
+    },
+    "week4_6": {
+      "focus": "Professional Features",
+      "tasks": [20, 24, 27, 34],
+      "hours": 19,
+      "status": "PLANNED"
+    }
+  },
+  "teams": {
+    "minimal": {
+      "size": 1,
+      "roles": ["fullstack"],
+      "timeline_weeks": 10,
+      "timeline_hours": 140
+    },
+    "small": {
+      "size": 2,
+      "roles": ["backend", "frontend"],
+      "timeline_weeks": 6,
+      "timeline_hours": 70
+    },
+    "medium": {
+      "size": 3,
+      "roles": ["backend", "frontend", "qa"],
+      "timeline_weeks": 4,
+      "timeline_hours": 47
+    }
+  },
+  "metrics": {
+    "code_completion": "65%",
+    "testing": "0%",
+    "documentation": "30%",
+    "security": "60%",
+    "performance": "70%"
+  },
+  "dependencies": [
+    {
+      "task_id": 4,
+      "depends_on": 2,
+      "reason": "Needs env config"
+    },
+    {
+      "task_id": 9,
+      "depends_on": 8,
+      "reason": "Queries need Redis"
+    },
+    {
+      "task_id": 7,
+      "depends_on": 3,
+      "reason": "Needs Jest setup"
+    }
+  ]
+}

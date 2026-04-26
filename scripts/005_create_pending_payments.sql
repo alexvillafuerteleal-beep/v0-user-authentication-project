@@ -1,0 +1,14 @@
+-- ⚠️ ARCHIVO DEPRECATED - No ejecutar este script
+-- 
+-- Esta tabla y script ya NO se usan.
+-- Todos los pagos ahora son en TIEMPO REAL con Stripe Checkout Sessions
+--
+-- CAMBIOS:
+-- ✅ Pagos con tarjeta de crédito ahora son inmediatos
+-- ✅ Los webhooks de Stripe actualizan directamente la tabla 'transactions'
+-- ✅ No hay "pagos pendientes" - solo confirmados o rechazados
+-- ❌ Removido: OXXO
+-- ❌ Removido: Transferencia bancaria
+--
+-- PARA LIMPIAR LA BASE DE DATOS (si ya ejecutaste este script):
+-- DROP TABLE IF EXISTS pending_payments CASCADE;
