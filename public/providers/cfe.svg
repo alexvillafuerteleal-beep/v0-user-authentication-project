@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">CFE energia</title>
+  <desc id="desc">Ilustracion de torres electricas y energia para servicios de luz</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="bolt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fef08a"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#sky)"/>
+  <circle cx="650" cy="110" r="70" fill="#93c5fd" opacity="0.35"/>
+  <g stroke="#93c5fd" stroke-width="8" opacity="0.75" fill="none">
+    <path d="M120 420 L170 120 L220 420"/>
+    <path d="M320 420 L370 90 L420 420"/>
+    <path d="M520 420 L570 140 L620 420"/>
+    <path d="M150 180 H390"/>
+    <path d="M350 170 H590"/>
+  </g>
+  <path d="M460 120 L390 250 H455 L380 380 L535 220 H465 Z" fill="url(#bolt)"/>
+  <rect x="0" y="420" width="800" height="80" fill="#111827" opacity="0.8"/>
+  <text x="36" y="470" fill="#e5e7eb" font-family="Arial, sans-serif" font-size="44" font-weight="700">CFE</text>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">PEMEX gas</title>
+  <desc id="desc">Ilustracion de energia de gas y llama para servicio de gas</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3f0b1f"/>
+      <stop offset="1" stop-color="#7f1d1d"/>
+    </linearGradient>
+    <linearGradient id="flame" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#f97316"/>
+      <stop offset="0.5" stop-color="#fb923c"/>
+      <stop offset="1" stop-color="#fde68a"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <g opacity="0.3" stroke="#fca5a5" stroke-width="6" fill="none">
+    <path d="M50 360 C180 290, 260 430, 420 360 C580 290, 650 420, 780 350"/>
+    <path d="M60 400 C210 330, 290 460, 460 390 C610 330, 700 450, 790 390"/>
+  </g>
+  <path d="M420 80 C360 150, 350 210, 395 275 C360 250, 320 250, 290 290 C250 345, 285 430, 380 450 C470 470, 560 420, 560 330 C560 255, 510 220, 465 230 C495 180, 485 120, 420 80 Z" fill="url(#flame)"/>
+  <path d="M430 210 C400 250, 400 285, 430 320 C460 285, 460 250, 430 210 Z" fill="#7f1d1d" opacity="0.45"/>
+  <text x="36" y="470" fill="#ffe4e6" font-family="Arial, sans-serif" font-size="44" font-weight="700">PEMEX GAS</text>
+</svg>

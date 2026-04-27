@@ -124,3 +124,82 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes floatSlow {
+  0% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
+  50% { transform: translateY(-8px) rotateX(4deg) rotateY(-4deg); }
+  100% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
+}
+
+@keyframes orbitGlow {
+  0% { transform: rotate(0deg) scale(1); opacity: 0.5; }
+  50% { transform: rotate(180deg) scale(1.05); opacity: 0.85; }
+  100% { transform: rotate(360deg) scale(1); opacity: 0.5; }
+}
+
+.hero-3d-scene {
+  position: relative;
+  min-height: 360px;
+  perspective: 1200px;
+}
+
+.hero-orb {
+  position: absolute;
+  inset: 20% 10% 10% 10%;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, rgba(34, 211, 238, 0.35), rgba(14, 116, 144, 0.02) 60%);
+  filter: blur(8px);
+  animation: orbitGlow 8s linear infinite;
+}
+
+.hero-card {
+  position: absolute;
+  border-radius: 1rem;
+  transform-style: preserve-3d;
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.hero-card-main {
+  left: 3%;
+  top: 5%;
+  width: 72%;
+  height: 280px;
+  transform: rotateY(-14deg) rotateX(8deg);
+}
+
+.hero-card-side {
+  right: 1%;
+  bottom: 4%;
+  width: 50%;
+  height: 180px;
+  transform: rotateY(12deg) rotateX(-2deg);
+  animation-delay: 0.3s;
+}
+
+.provider-card {
+  transform: perspective(900px) rotateX(0deg) rotateY(0deg);
+  transition: transform 250ms ease, box-shadow 250ms ease;
+}
+
+.provider-card:hover {
+  transform: perspective(900px) rotateX(4deg) rotateY(-4deg) translateY(-4px);
+  box-shadow: 0 16px 50px rgba(14, 165, 233, 0.18);
+}
+
+@media (max-width: 768px) {
+  .hero-3d-scene {
+    min-height: 290px;
+  }
+
+  .hero-card-main {
+    left: 0;
+    width: 82%;
+    height: 220px;
+  }
+
+  .hero-card-side {
+    right: 0;
+    width: 62%;
+    height: 150px;
+  }
+}

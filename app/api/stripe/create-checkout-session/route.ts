@@ -33,6 +33,16 @@ export async function POST(req: NextRequest) {
 
     console.log(`[API] Processing card payment for user: ${user.id}`)
 
+    // Resolver base URL para permitir despliegue en cualquier hosting/dominio.
+    const forwardedProto = req.headers.get("x-forwarded-proto")
+    const forwardedHost = req.headers.get("x-forwarded-host")
+    const requestOrigin = req.nextUrl.origin
+    const resolvedBaseUrl =
+      process.env.NEXT_PUBLIC_APP_URL ||
+      (forwardedHost
+        ? `${forwardedProto || "https"}://${forwardedHost}`
+        : requestOrigin)
+
     // Crear sesión de checkout con Stripe
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -52,8 +62,8 @@ export async function POST(req: NextRequest) {
         },
       ],
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard/servicios?payment=success&service=${encodeURIComponent(service)}&provider=${encodeURIComponent(provider || "")}&serviceId=${serviceId}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard/servicios?payment=cancelled`,
+      success_url: `${resolvedBaseUrl}/dashboard/servicios?payment=success&service=${encodeURIComponent(service)}&provider=${encodeURIComponent(provider || "")}&serviceId=${serviceId}`,
+      cancel_url: `${resolvedBaseUrl}/dashboard/servicios?payment=cancelled`,
       metadata: {
         userId: user.id,
         serviceId: serviceId,
