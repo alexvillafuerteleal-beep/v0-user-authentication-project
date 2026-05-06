@@ -1,0 +1,63 @@
+{
+  "name": "PagoIA",
+  "short_name": "PagoIA",
+  "description": "Gestión de pagos y servicios con Inteligencia Artificial",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#00D9FF",
+  "orientation": "portrait-primary",
+  "categories": ["finance", "productivity"],
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/icon-light-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "apple touch icon"
+    },
+    {
+      "src": "/PAGO_IA.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/PAGO_IA.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "PagoIA Dashboard"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Ver tu panel principal",
+      "url": "/dashboard",
+      "icons": [{ "src": "/icon-dark-32x32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Historial",
+      "short_name": "Historial",
+      "description": "Ver historial de pagos",
+      "url": "/dashboard/historial",
+      "icons": [{ "src": "/icon-dark-32x32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Notificaciones",
+      "short_name": "Alertas",
+      "description": "Ver notificaciones",
+      "url": "/dashboard/notificaciones",
+      "icons": [{ "src": "/icon-dark-32x32.png", "sizes": "32x32" }]
+    }
+  ]
+}

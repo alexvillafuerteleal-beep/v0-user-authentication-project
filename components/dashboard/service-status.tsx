@@ -40,7 +40,7 @@ export function ServiceStatus() {
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "transactions" },
-        (payload) => {
+        (payload: { new: Record<string, unknown> | null; old: Record<string, unknown> | null; eventType: string }) => {
           const eventUserId =
             (payload.new as { user_id?: string } | null)?.user_id ||
             (payload.old as { user_id?: string } | null)?.user_id

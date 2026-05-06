@@ -1,38 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
-  <title id="title">TELMEX internet</title>
-  <desc id="desc">Ilustracion de red e internet para servicio de conectividad</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">TELMEX Conectividad</title>
+  <desc id="desc">Tarjeta visual premium para TELMEX con lenguaje visual 3D de PagoIA</desc>
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#1e1b4b"/>
-      <stop offset="1" stop-color="#3730a3"/>
+    <linearGradient id="bgTel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#031025" />
+      <stop offset="1" stop-color="#0a1f4f" />
     </linearGradient>
-    <radialGradient id="core" cx="50%" cy="50%" r="45%">
-      <stop offset="0" stop-color="#a5b4fc"/>
-      <stop offset="1" stop-color="#6366f1"/>
-    </radialGradient>
+    <linearGradient id="panelTel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#133a8a" />
+      <stop offset="1" stop-color="#0d2558" />
+    </linearGradient>
+    <linearGradient id="accentTel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#9dd0ff" />
+      <stop offset="1" stop-color="#45a4ff" />
+    </linearGradient>
   </defs>
-  <rect width="800" height="500" fill="url(#bg)"/>
-  <circle cx="400" cy="250" r="70" fill="url(#core)"/>
-  <g fill="none" stroke="#c7d2fe" stroke-width="6" opacity="0.8">
-    <circle cx="400" cy="250" r="130"/>
-    <circle cx="400" cy="250" r="190"/>
+
+  <rect width="960" height="540" fill="url(#bgTel)" />
+  <rect x="28" y="28" width="904" height="484" rx="28" fill="url(#panelTel)" stroke="#2f6fd8" stroke-width="2" />
+
+  <g transform="translate(88 96)">
+    <rect x="0" y="0" width="272" height="348" rx="26" fill="#14357c" stroke="#5ea7ff" stroke-width="2" />
+    <path d="M46 118 C116 76, 188 76, 252 118" fill="none" stroke="url(#accentTel)" stroke-width="16" stroke-linecap="round" />
+    <path d="M46 152 C116 110, 188 110, 252 152" fill="none" stroke="#67b4ff" stroke-width="12" stroke-linecap="round" />
+    <circle cx="64" cy="248" r="7" fill="#9ed1ff" />
+    <circle cx="100" cy="248" r="7" fill="#9ed1ff" />
+    <circle cx="136" cy="248" r="7" fill="#9ed1ff" />
+    <text x="44" y="334" font-family="Arial, sans-serif" font-size="34" font-weight="800" fill="#cde8ff">TELMEX</text>
   </g>
-  <g fill="#e0e7ff">
-    <circle cx="400" cy="250" r="10"/>
-    <circle cx="270" cy="250" r="10"/>
-    <circle cx="530" cy="250" r="10"/>
-    <circle cx="400" cy="120" r="10"/>
-    <circle cx="400" cy="380" r="10"/>
-    <circle cx="305" cy="155" r="10"/>
-    <circle cx="495" cy="345" r="10"/>
+
+  <g transform="translate(392 166)">
+    <text x="0" y="94" font-family="Arial, sans-serif" font-size="116" font-weight="900" fill="#ebf4ff">TELMEX</text>
+    <text x="2" y="142" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="3" fill="#97cbff">CONECTIVIDAD TOTAL</text>
+    <text x="2" y="180" font-family="Arial, sans-serif" font-size="20" font-weight="600" letter-spacing="1.5" fill="#76b3f1">PAGOIA • INTERNET Y TELEFONIA EN UN SOLO PANEL</text>
   </g>
-  <g stroke="#a5b4fc" stroke-width="4" opacity="0.75">
-    <line x1="400" y1="250" x2="270" y2="250"/>
-    <line x1="400" y1="250" x2="530" y2="250"/>
-    <line x1="400" y1="250" x2="400" y2="120"/>
-    <line x1="400" y1="250" x2="400" y2="380"/>
-    <line x1="400" y1="250" x2="305" y2="155"/>
-    <line x1="400" y1="250" x2="495" y2="345"/>
-  </g>
-  <text x="36" y="470" fill="#eef2ff" font-family="Arial, sans-serif" font-size="44" font-weight="700">TELMEX</text>
 </svg>

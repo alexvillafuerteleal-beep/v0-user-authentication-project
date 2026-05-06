@@ -80,6 +80,12 @@ export default function DashboardPage() {
       }
     } catch (error) {
       console.error("[Dashboard] Error loading stats:", error)
+      // Reportar a Sentry si está disponible
+      if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+        import("@sentry/nextjs").then(({ captureException }) => {
+          captureException(error)
+        })
+      }
     } finally {
       setLoading(false)
     }

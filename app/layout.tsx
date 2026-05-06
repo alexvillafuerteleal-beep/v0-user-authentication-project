@@ -1,6 +1,7 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { FloatingAIPaymentSupport } from '@/components/floating-ai-payment-support'
 import { PushNotificationsManager } from '@/components/push-notifications-manager'
@@ -9,10 +10,23 @@ import './globals.css'
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  ],
+}
+
 export const metadata: Metadata = {
   title: 'PagoIA - Gestión de Pagos con IA',
   description: 'Simplifica y automatiza tus pagos de servicios con inteligencia artificial',
   generator: 'v0.app',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'PagoIA',
+  },
   icons: {
     icon: [
       {
@@ -45,6 +59,7 @@ export default function RootLayout({
           <PushNotificationsManager />
           <FloatingAIPaymentSupport />
           <Analytics />
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">PEMEX mini</title>
+  <defs>
+    <linearGradient id="pemMiniBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4f1220"/>
+      <stop offset="1" stop-color="#8a1730"/>
+    </linearGradient>
+    <linearGradient id="pemMiniFlame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff90a7"/>
+      <stop offset="1" stop-color="#ff3f66"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#pemMiniBg)"/>
+  <path d="M31 12 C23 21, 21 31, 28 39 C22 37, 17 40, 16 46 C14 52, 20 56, 30 56 C41 56, 49 50, 48 41 C47 35, 43 31, 37 31 C40 26, 38 18, 31 12 Z" fill="url(#pemMiniFlame)"/>
+</svg>

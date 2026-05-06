@@ -92,7 +92,7 @@ export default function MisServiciosPage() {
       if (error) throw error
 
       if (data && data.length > 0) {
-        const mapped: ServiceItem[] = data.map((row) => ({
+        const mapped: ServiceItem[] = data.map((row: { id: string; service_type: string; provider: string; last_amount: number | null; due_date: number | null; status: string }) => ({
           dbId: row.id,
           icon: serviceIconMap[row.service_type] ?? Zap,
           name: serviceNameMap[row.service_type] ?? row.service_type,

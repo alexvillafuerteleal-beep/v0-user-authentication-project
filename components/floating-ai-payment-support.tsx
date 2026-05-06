@@ -312,7 +312,7 @@ export function FloatingAIPaymentSupport() {
               <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-500/0 to-blue-500/0 group-hover:from-cyan-500/10 group-hover:to-blue-500/10 pointer-events-none transition-all"></div>
             </div>
             <Button
-              onClick={sendMessage}
+              onClick={() => sendMessage()}
               disabled={isLoading || !inputValue.trim()}
               className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white h-10 px-4 rounded-lg font-semibold transition-all hover:shadow-lg hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed border border-cyan-300/50"
             >

@@ -1,36 +1,50 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, BarChart3, Lock, TrendingUp, CheckCircle, Sparkles, ShieldCheck, Cpu } from "lucide-react"
+import { ArrowRight, BarChart3, Lock, TrendingUp, CheckCircle, Sparkles, Cpu } from "lucide-react"
+import { HeroSection } from "@/components/hero/HeroSection"
 
 const providers = [
   {
     name: "CFE",
     service: "Electricidad",
     image: "/providers/cfe.svg",
+    miniImage: "/providers/mini/cfe-mini.svg",
+    tag: "Energia",
+    tone: "brand-cfe",
   },
   {
     name: "CONAGUA",
     service: "Agua Potable",
     image: "/providers/conagua.svg",
+    miniImage: "/providers/mini/conagua-mini.svg",
+    tag: "Agua",
+    tone: "brand-conagua",
   },
   {
     name: "PEMEX GAS",
     service: "Gas Natural",
     image: "/providers/pemex.svg",
+    miniImage: "/providers/mini/pemex-mini.svg",
+    tag: "Gas",
+    tone: "brand-pemex",
   },
   {
     name: "TELMEX",
     service: "Internet y Telefonia",
     image: "/providers/telmex.svg",
+    miniImage: "/providers/mini/telmex-mini.svg",
+    tag: "Internet",
+    tone: "brand-telmex",
   },
 ]
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-black">
+    <div className="landing-3d min-h-screen">
+      <div className="landing-atmosphere" aria-hidden="true" />
       {/* Navigation */}
-      <nav className="flex items-center justify-between px-6 md:px-8 py-4 border-b border-border/30 backdrop-blur-sm sticky top-0 z-50">
+      <nav className="landing-nav sticky top-0 z-50 flex items-center justify-between px-6 py-4 md:px-8">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-all duration-300">
             <svg viewBox="0 0 64 64" className="w-10 h-10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,15 +68,18 @@ export default function HomePage() {
             </svg>
             <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">PagoIA</span>
           </Link>
-          <div className="hidden lg:flex items-center gap-8">
-            <Link href="#medios" className="text-foreground hover:text-cyan-400 transition-colors text-sm font-medium">
+          <div className="hidden lg:flex items-center gap-3">
+            <Link href="#medios" className="menu-pill text-foreground">
               Medios de Pago
             </Link>
-            <Link href="#caracteristicas" className="text-muted-foreground hover:text-cyan-400 transition-colors text-sm font-medium">
+            <Link href="#caracteristicas" className="menu-pill text-muted-foreground">
               Características
             </Link>
-            <Link href="#servicios" className="text-muted-foreground hover:text-cyan-400 transition-colors text-sm font-medium">
+            <Link href="#servicios" className="menu-pill text-muted-foreground">
               Servicios
+            </Link>
+            <Link href="#panel" className="menu-pill text-muted-foreground">
+              Vista 3D
             </Link>
           </div>
         </div>
@@ -77,78 +94,7 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative px-6 md:px-8 py-20 md:py-40 overflow-hidden">
-        {/* Gradient backgrounds */}
-        <div className="absolute top-40 right-1/3 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-20 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-        
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="text-center space-y-6 mb-16">
-            <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight">
-              Gestion de Pagos
-              <br />
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent animate-pulse">
-                Tenemos Todo
-              </span>
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto font-light">
-              Maximiza tu control, minimiza tus costos y optimiza tus pagos con inteligencia artificial
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button asChild size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-lg px-8 font-semibold text-base h-12">
-                <Link href="/auth/register">
-                  Comenzar Ahora
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="rounded-lg px-8 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 font-semibold text-base h-12">
-                <Link href="#caracteristicas">Explorar</Link>
-              </Button>
-            </div>
-          </div>
-
-          <div id="medios" className="mt-20 grid gap-8 lg:grid-cols-[1.2fr_1fr] items-center">
-            <div className="hero-3d-scene">
-              <div className="hero-orb" />
-              <div className="hero-card hero-card-main">
-                <div className="relative h-full w-full overflow-hidden rounded-xl border border-cyan-300/25 bg-slate-950/60 p-4">
-                  <Image
-                    src="/PAGO_IA.png"
-                    alt="Panel de pagos de PagoIA"
-                    fill
-                    className="object-cover opacity-90"
-                    priority
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4 text-left">
-                    <p className="text-xs uppercase tracking-[0.2em] text-cyan-300/90">Control total</p>
-                    <p className="mt-1 text-lg font-semibold text-white">Pagos en tiempo real con analitica inteligente</p>
-                  </div>
-                </div>
-              </div>
-              <div className="hero-card hero-card-side">
-                <div className="h-full w-full rounded-xl border border-cyan-300/20 bg-slate-950/70 p-5 backdrop-blur-sm">
-                  <p className="text-xs uppercase tracking-[0.2em] text-cyan-300/80">Metodo principal</p>
-                  <p className="mt-2 text-xl font-semibold text-white">Tarjeta credito o debito</p>
-                  <p className="mt-2 text-sm text-slate-300">Procesamiento inmediato con confirmacion segura y recibo digital.</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-cyan-500/20 bg-card/40 p-6 backdrop-blur-sm">
-              <h3 className="text-2xl font-semibold text-foreground">Alta de usuarios lista</h3>
-              <p className="mt-3 text-muted-foreground">
-                Registro por correo y acceso con Google activos. Flujo de autenticacion preparado para dominio propio.
-              </p>
-              <div className="mt-6 space-y-3 text-sm text-slate-200">
-                <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-cyan-400" />Confirmacion de sesion y rutas protegidas</div>
-                <div className="flex items-center gap-2"><Cpu className="h-4 w-4 text-cyan-400" />Checkout de Stripe adaptable a cualquier host</div>
-                <div className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-cyan-400" />Experiencia visual optimizada para publico final</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroSection />
 
       {/* Características Section */}
       <section id="caracteristicas" className="px-6 md:px-8 py-20 border-t border-cyan-500/20">
@@ -197,7 +143,7 @@ export default function HomePage() {
             ].map((feature, i) => (
               <div 
                 key={i} 
-                className="p-6 rounded-xl border border-cyan-500/20 bg-gradient-to-br from-card to-card/50 hover:border-cyan-500/50 hover:from-cyan-500/10 transition-all group"
+                className="p-6 rounded-xl border border-cyan-500/20 bg-gradient-to-br from-card to-card/50 hover:border-cyan-500/50 hover:from-cyan-500/10 transition-all group tilt-panel"
               >
                 <div className="mb-4 w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <feature.icon className="w-6 h-6 text-cyan-400" />
@@ -206,6 +152,54 @@ export default function HomePage() {
                 <p className="text-sm text-muted-foreground">{feature.description}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Vista de Panel */}
+      <section id="panel" className="px-6 md:px-8 py-20 border-t border-cyan-500/20">
+        <div className="max-w-6xl mx-auto grid gap-8 lg:grid-cols-[1.2fr_1fr] items-center">
+          <div className="screenshot-shell">
+            <div className="screenshot-grid" />
+            <div className="relative h-[420px] w-full overflow-hidden rounded-2xl border border-cyan-300/25">
+              <Image
+                src="/PAGO_IA.png"
+                alt="Captura de pantalla real del panel PagoIA"
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/20 to-transparent" />
+            </div>
+            <div className="floating-logo-badge badge-cfe">
+              <Image src="/providers/cfe.svg" alt="Logo CFE" width={58} height={32} className="h-auto w-12" />
+              <span>CFE</span>
+            </div>
+            <div className="floating-logo-badge badge-conagua">
+              <Image src="/providers/conagua.svg" alt="Logo CONAGUA" width={58} height={32} className="h-auto w-12" />
+              <span>CONAGUA</span>
+            </div>
+            <div className="floating-logo-badge badge-pemex">
+              <Image src="/providers/pemex.svg" alt="Logo PEMEX" width={58} height={32} className="h-auto w-12" />
+              <span>PEMEX</span>
+            </div>
+            <div className="floating-logo-badge badge-telmex">
+              <Image src="/providers/telmex.svg" alt="Logo TELMEX" width={58} height={32} className="h-auto w-12" />
+              <span>TELMEX</span>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <p className="text-xs uppercase tracking-[0.4em] text-cyan-300">Captura operativa</p>
+            <h3 className="text-3xl font-bold text-foreground">Visualizacion del sistema en vivo</h3>
+            <p className="text-muted-foreground">
+              La experiencia integra pagos, estados y notificaciones en una sola vista. Los logos de los proveedores se muestran de forma directa para que el usuario identifique su servicio sin friccion.
+            </p>
+            <div className="space-y-3 text-sm text-slate-200">
+              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Vista optimizada para escritorio y celular</div>
+              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Animaciones fluidas sin afectar rendimiento</div>
+              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Jerarquia visual clara para conversion</div>
+            </div>
           </div>
         </div>
       </section>
@@ -226,14 +220,27 @@ export default function HomePage() {
             {providers.map((provider, i) => (
               <div 
                 key={i}
-                className="provider-card p-4 rounded-xl border border-white/10 bg-gradient-to-br from-slate-900/70 to-slate-900/30 hover:border-cyan-500/40 transition-all group cursor-pointer"
+                className={`provider-card ${provider.tone} p-4 rounded-xl border border-white/10 bg-gradient-to-br from-slate-900/70 to-slate-900/30 hover:border-cyan-500/40 transition-all group cursor-pointer`}
               >
-                <div className="relative mb-4 h-36 w-full overflow-hidden rounded-lg border border-cyan-500/20">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="provider-logo-chip">Proveedor Oficial</div>
+                  <div className="provider-tone-chip">{provider.tag}</div>
+                </div>
+                <div className="provider-media relative mb-4 h-36 w-full overflow-hidden rounded-lg border border-cyan-500/20 bg-slate-950/60">
+                  <div className="provider-mini-logo md:hidden" aria-hidden="true">
+                    <Image
+                      src={provider.miniImage}
+                      alt=""
+                      width={28}
+                      height={28}
+                      className="h-6 w-6 object-contain"
+                    />
+                  </div>
                   <Image
                     src={provider.image}
                     alt={`${provider.name} ${provider.service}`}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="provider-logo-art object-contain p-3"
                   />
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-1">{provider.name}</h3>
@@ -296,6 +303,12 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
+
+      <div className="mobile-nav fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full border border-cyan-400/30 bg-slate-950/90 p-2 backdrop-blur lg:hidden">
+        <Link href="#medios" className="mobile-nav-item">Medios</Link>
+        <Link href="#caracteristicas" className="mobile-nav-item">IA</Link>
+        <Link href="#servicios" className="mobile-nav-item">Servicios</Link>
+      </div>
     </div>
   )
 }

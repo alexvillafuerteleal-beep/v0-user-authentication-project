@@ -137,7 +137,7 @@ export default function HistorialPage() {
         if (error) throw error
 
         if (mounted) {
-          setTransactions((data || []).map((tx) => mapTransaction(tx as DbTransaction)))
+          setTransactions((data || []).map((tx: DbTransaction) => mapTransaction(tx)))
         }
       } catch (error) {
         console.error("[Historial] Error loading transactions:", error)
@@ -160,7 +160,7 @@ export default function HistorialPage() {
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "transactions" },
-        (payload) => {
+        (payload: { new: Record<string, unknown>; old: Record<string, unknown>; eventType: string }) => {
           const incomingUserId =
             (payload.new as { user_id?: string } | null)?.user_id ||
             (payload.old as { user_id?: string } | null)?.user_id
@@ -170,7 +170,7 @@ export default function HistorialPage() {
           }
 
           if (payload.eventType === "INSERT" && payload.new) {
-            const tx = mapTransaction(payload.new as DbTransaction)
+            const tx = mapTransaction(payload.new as unknown as DbTransaction)
             setTransactions((prev) => [tx, ...prev.filter((item) => item.id !== tx.id)])
 
             if ((tx.status || "").toLowerCase() === "completed") {
@@ -184,7 +184,7 @@ export default function HistorialPage() {
           }
 
           if (payload.eventType === "UPDATE" && payload.new) {
-            const tx = mapTransaction(payload.new as DbTransaction)
+            const tx = mapTransaction(payload.new as unknown as DbTransaction)
             setTransactions((prev) => prev.map((item) => (item.id === tx.id ? tx : item)))
             return
           }

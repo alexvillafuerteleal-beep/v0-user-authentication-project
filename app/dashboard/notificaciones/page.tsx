@@ -47,6 +47,9 @@ export default function NotificacionesPage() {
       setAlerts((data as Alert[]) || [])
     } catch (error) {
       console.error("Error loading alerts:", error)
+      if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+        import("@sentry/nextjs").then(({ captureException }) => captureException(error))
+      }
       toast({
         title: "Error",
         description: "No se pudieron cargar las notificaciones",
@@ -308,7 +311,7 @@ export default function NotificacionesPage() {
 
                   {/* Actions */}
                   <div className="flex gap-2">
-                    {!alert.read && (
+                    {!alert.is_read && (
                       <Button
                         onClick={() => handleMarkAsRead(alert.id)}
                         disabled={markingRead === alert.id}

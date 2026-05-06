@@ -54,7 +54,7 @@ export default function EstadosCuentaPage() {
         const fmtPeriod = (iso: string) =>
           new Date(iso).toLocaleDateString("es-MX", { month: "long", year: "numeric" })
             .replace(/^\w/, c => c.toUpperCase())
-        const mapped: Invoice[] = txs.map(t => ({
+        const mapped: Invoice[] = txs.map((t: { id: string; service_type: string; amount: number; transaction_date: string; status: string; receipt_number: string | null }) => ({
           id: t.id,
           service: SERVICE_LABELS[t.service_type] || t.service_type,
           date: fmtDate(t.transaction_date),
@@ -66,7 +66,7 @@ export default function EstadosCuentaPage() {
         setInvoices(mapped)
         // Build monthly reports
         const monthMap: Record<string, { total: number; services: Set<string> }> = {}
-        txs.filter(t => t.status === "completed").forEach(t => {
+        txs.filter((t: { status: string; transaction_date: string; amount: number; service_type: string }) => t.status === "completed").forEach((t: { status: string; transaction_date: string; amount: number; service_type: string }) => {
           const key = fmtPeriod(t.transaction_date)
           if (!monthMap[key]) monthMap[key] = { total: 0, services: new Set() }
           monthMap[key].total += t.amount
