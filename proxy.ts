@@ -1,7 +1,12 @@
-import { type NextRequest, NextResponse } from 'next/server'
+// proxy.ts — Next.js 16.2+ (replaces middleware.ts)
+// Mantener este archivo sin imports pesados (Sentry, Supabase, etc.):
+// cualquier fallo aquí tumba TODAS las rutas con MIDDLEWARE_INVOCATION_FAILED.
+import { NextResponse } from 'next/server'
 
-export function proxy(request: NextRequest) {
-  return NextResponse.next()
+export function proxy() {
+  const response = NextResponse.next()
+  response.headers.set('x-request-id', crypto.randomUUID())
+  return response
 }
 
 export const config = {

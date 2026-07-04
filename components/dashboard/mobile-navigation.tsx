@@ -17,7 +17,7 @@ import {
   X,
   BarChart3
 } from "lucide-react"
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from "@/components/ui/sheet"
 
 const sidebarItems = [
   {
@@ -63,6 +63,7 @@ export function MobileNavigation() {
         </div>
 
         <SheetContent side="left" className="w-64 bg-sidebar border-r border-border p-0">
+          <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
           <div className="flex flex-col h-full">
             {/* Logo */}
             <div className="p-4 border-b border-sidebar-border">
