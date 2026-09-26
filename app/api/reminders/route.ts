@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { createClient } from "@/lib/supabase/server"
+import { maskPhone, normalizeMxPhone, whatsappEnabled } from "@/lib/notifications/whatsapp"
 
 const PutSchema = z.object({
   user_service_id: z.string().uuid(),
-  channels: z.array(z.enum(["push", "email"])).max(2),
+  channels: z.array(z.enum(["push", "email", "whatsapp"])).max(3),
   days_before: z.number().int().min(0).max(15),
 })
 
@@ -21,7 +22,13 @@ export async function GET() {
   if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
   const { data, error } = await supabase.from("reminders").select("user_service_id, channel, days_before").eq("user_id", user.id)
   if (error) return NextResponse.json({ error: "No se pudieron leer los recordatorios" }, { status: 500 })
-  return NextResponse.json({ reminders: data ?? [], emailEnabled: Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM) })
+  const phone = normalizeMxPhone(user.user_metadata?.phone)
+  return NextResponse.json({
+    reminders: data ?? [],
+    emailEnabled: Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM),
+    whatsappEnabled: whatsappEnabled(),
+    whatsappPhone: phone ? maskPhone(phone) : null,
+  })
 }
 
 /** Reemplaza los recordatorios de un servicio. Sin canales, los desactiva. */
@@ -31,6 +38,9 @@ export async function PUT(req: NextRequest) {
   const parsed = PutSchema.safeParse(await req.json().catch(() => null))
   if (!parsed.success) return NextResponse.json({ error: "Datos inválidos" }, { status: 400 })
   const { user_service_id, channels, days_before } = parsed.data
+  if (channels.includes("whatsapp") && !normalizeMxPhone(user.user_metadata?.phone)) {
+    return NextResponse.json({ error: "Agrega un celular de 10 dígitos en tu perfil para recibir avisos por WhatsApp" }, { status: 400 })
+  }
 
   const { data: service } = await supabase.from("user_services").select("id").eq("id", user_service_id).eq("user_id", user.id).maybeSingle()
   if (!service) return NextResponse.json({ error: "Servicio no encontrado" }, { status: 404 })

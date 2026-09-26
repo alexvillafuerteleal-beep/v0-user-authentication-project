@@ -15,6 +15,7 @@ export const DESTINATIONS = {
   recibos: { url: "/dashboard/recibos", label: "Escanear un recibo" },
   calendario: { url: "/dashboard/calendario", label: "Ver calendario" },
   presupuestos: { url: "/dashboard/presupuestos", label: "Ver presupuestos" },
+  programados: { url: "/dashboard/programados", label: "Ir a pagos automáticos" },
   hogar: { url: "/dashboard/hogar", label: "Ir a hogar compartido" },
   historial: { url: "/dashboard/historial", label: "Ver historial" },
   estados: { url: "/dashboard/estados", label: "Ver estados de cuenta" },
@@ -94,7 +95,7 @@ export const TOOLS: Anthropic.Beta.BetaTool[] = [
   {
     name: "navegar",
     description:
-      "Muestra al usuario un botón para abrir una pantalla de PagoIA. Úsala cuando quiera pagar (servicios), escanear o capturar un recibo (recibos), ver sus vencimientos o programar recordatorios (calendario), poner límites de gasto (presupuestos), dividir recibos con quienes vive (hogar), ver su historial, sus estados de cuenta, el comparativo, sus notificaciones, su perfil o la configuración.",
+      "Muestra al usuario un botón para abrir una pantalla de PagoIA. Úsala cuando quiera pagar (servicios), escanear o capturar un recibo (recibos), ver sus vencimientos o programar recordatorios (calendario), poner límites de gasto (presupuestos), activar pagos automáticos con tope (programados), dividir recibos con quienes vive (hogar), ver su historial, sus estados de cuenta, el comparativo, sus notificaciones, su perfil o la configuración.",
     input_schema: {
       type: "object",
       properties: { destino: { type: "string", enum: destinationKeys } },
@@ -139,7 +140,7 @@ export async function runTool(name: string, rawInput: unknown, supabase: Supabas
     case "listar_servicios": {
       const { data, error } = await supabase
         .from("user_services")
-        .select("service_type, provider, status, due_date, last_amount, auto_pay")
+        .select("service_type, provider, status, due_date, last_amount")
         .eq("user_id", userId)
       if (error) return { content: `No se pudieron leer los servicios: ${error.message}`, isError: true }
       return { content: JSON.stringify({ servicios: data ?? [] }) }
@@ -149,7 +150,7 @@ export async function runTool(name: string, rawInput: unknown, supabase: Supabas
       const input = inputSchemas.historial_pagos.parse(rawInput)
       let query = supabase
         .from("transactions")
-        .select("service_type, provider, amount, currency, status, transaction_date, receipt_number")
+        .select("service_type, provider, amount, status, transaction_date, receipt_number")
         .eq("user_id", userId)
         .order("transaction_date", { ascending: false })
         .limit(input.limite ?? 10)

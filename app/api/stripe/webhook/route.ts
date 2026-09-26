@@ -2,6 +2,7 @@ import Stripe from "stripe"
 import { NextRequest, NextResponse } from "next/server"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { createAlertAndPush } from "@/lib/notifications/push"
+import { saveCardFromSetupSession } from "@/lib/payments/autopay-stripe"
 
 function getWebhookRuntime() {
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY
@@ -60,7 +61,7 @@ export async function POST(req: NextRequest) {
   try {
     // Pagos por tarjeta completados
     if (event.type === "checkout.session.completed") {
-      await handleCheckoutSessionCompleted(event)
+      await handleCheckoutSessionCompleted(event, runtime.stripe)
     }
 
     // OXXO: la ficha se paga después; Stripe avisa si se pagó o si venció.
@@ -87,8 +88,14 @@ export async function POST(req: NextRequest) {
 /**
  * Maneja finalización de sesión de checkout (pagos por tarjeta)
  */
-async function handleCheckoutSessionCompleted(event: Stripe.Event) {
+async function handleCheckoutSessionCompleted(event: Stripe.Event, stripe: Stripe) {
   const session = event.data.object as Stripe.Checkout.Session
+
+  // Tarjeta guardada para pagos automáticos: no hay cobro que registrar.
+  if (session.mode === "setup") {
+    await saveCardFromSetupSession(stripe, createAdminClient(), session)
+    return
+  }
 
   try {
     const supabase = createAdminClient()
@@ -106,8 +113,9 @@ async function handleCheckoutSessionCompleted(event: Stripe.Event) {
     }
 
     // Con OXXO la sesión se completa al generar la ficha, pero el pago llega después.
+    // receipt_number guarda el id de la sesión para cerrar la transacción en handleAsyncPayment.
     if (session.payment_status === "unpaid") {
-      await supabase.from("transactions").insert({
+      const { error: pendingError } = await supabase.from("transactions").insert({
         user_id: userId,
         service_type: serviceType,
         amount: amount,
@@ -115,8 +123,8 @@ async function handleCheckoutSessionCompleted(event: Stripe.Event) {
         provider: provider,
         receipt_number: session.id,
         transaction_date: new Date().toISOString(),
-        metadata: { payment_method: "oxxo" },
       })
+      if (pendingError) console.error("Pending OXXO transaction insert error:", pendingError)
       await createAlertAndPush({
         userId,
         title: `Ficha OXXO lista: ${serviceName}`,

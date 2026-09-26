@@ -2,7 +2,7 @@
 -- Un hogar agrupa a roommates o familia; un pago se puede dividir por porcentajes.
 
 create table if not exists public.households (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   name        text not null check (length(name) between 1 and 60),
   owner_id    uuid not null references auth.users(id) on delete cascade,
   created_at  timestamptz default now()
@@ -27,7 +27,7 @@ create table if not exists public.household_invites (
 );
 
 create table if not exists public.bill_splits (
-  id              uuid primary key default uuid_generate_v4(),
+  id              uuid primary key default gen_random_uuid(),
   household_id    uuid not null references public.households(id) on delete cascade,
   transaction_id  uuid references public.transactions(id) on delete set null,
   created_by      uuid not null references auth.users(id) on delete cascade,

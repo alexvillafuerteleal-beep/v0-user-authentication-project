@@ -16,7 +16,7 @@ alter table public.alerts
 create index if not exists idx_alerts_source on public.alerts(user_id, source);
 
 create table if not exists public.budgets (
-  id            uuid primary key default uuid_generate_v4(),
+  id            uuid primary key default gen_random_uuid(),
   user_id       uuid not null references auth.users(id) on delete cascade,
   service_type  text not null,
   period_limit  numeric(10,2) not null check (period_limit > 0),
@@ -26,7 +26,7 @@ create table if not exists public.budgets (
 );
 
 create table if not exists public.reminders (
-  id               uuid primary key default uuid_generate_v4(),
+  id               uuid primary key default gen_random_uuid(),
   user_id          uuid not null references auth.users(id) on delete cascade,
   user_service_id  uuid not null references public.user_services(id) on delete cascade,
   channel          text not null check (channel in ('push','email')),

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, BarChart3, Lock, TrendingUp, CheckCircle, Sparkles, Cpu } from "lucide-react"
 import { HeroSection } from "@/components/hero/HeroSection"
 import { Logo } from "@/components/brand/logo"
+import { ExplainerVideo } from "@/components/landing/explainer-video"
 
 const providers = [
   {
@@ -77,6 +78,20 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <HeroSection />
+
+      {/* Video explicativo */}
+      <section id="video" className="px-6 md:px-8 py-20 border-t border-cyan-500/20">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-xs uppercase tracking-[0.4em] text-cyan-300">Mira cómo funciona</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-bold text-foreground">PagoIA en 50 segundos</h2>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+              Juntas tus recibos, los capturas con una foto, sabes cuánto viene y pagas con tarjeta u OXXO.
+            </p>
+          </div>
+          <ExplainerVideo />
+        </div>
+      </section>
 
       {/* Características Section */}
       <section id="caracteristicas" className="px-6 md:px-8 py-20 border-t border-cyan-500/20">

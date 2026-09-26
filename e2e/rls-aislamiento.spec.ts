@@ -28,6 +28,9 @@ const TABLES = [
   'ai_messages',
   'budgets',
   'reminders',
+  'payment_profiles',
+  'scheduled_payments',
+  'autopay_runs',
 ]
 
 async function signIn(email: string, password: string) {

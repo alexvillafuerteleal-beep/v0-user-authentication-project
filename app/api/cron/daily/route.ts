@@ -2,9 +2,13 @@ import { NextRequest, NextResponse } from "next/server"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { createAlertAndPush } from "@/lib/notifications/push"
 import { sendEmail } from "@/lib/notifications/email"
+import { normalizeMxPhone, sendWhatsAppTemplate } from "@/lib/notifications/whatsapp"
 import { computeUserForecasts } from "@/lib/forecast-service"
 import { MODEL_VERSION } from "@/lib/forecast"
 import { daysUntil, nextDueDate, parseDueDay, toISODate } from "@/lib/due-dates"
+import { autopayChargesAllowed, planAutopay, type PendingRow, type ScheduleRow, type ServiceRow } from "@/lib/autopay"
+import { chargeOffSession, getStripe, type PaymentProfile } from "@/lib/payments/autopay-stripe"
+import type { SupabaseClient } from "@supabase/supabase-js"
 
 export const runtime = "nodejs"
 export const maxDuration = 60
@@ -26,8 +30,9 @@ const RECEIPT_RETENTION_DAYS = 30
  * 1. Guarda el pronóstico del siguiente periodo y cierra predicciones pasadas con su monto real.
  * 2. Avisa si el recibo del periodo actual salió fuera de lo normal.
  * 3. Avisa al pasar el porcentaje de alerta del presupuesto.
- * 4. Envía los recordatorios de vencimiento (push y correo).
- * 5. Borra las imágenes de recibos confirmados hace más de 30 días.
+ * 4. Envía los recordatorios de vencimiento (push, correo y WhatsApp).
+ * 5. Cobra los pagos automáticos de recibos pendientes que no pasan su tope.
+ * 6. Borra las imágenes de recibos confirmados hace más de 30 días.
  */
 export async function GET(req: NextRequest) {
   const secret = process.env.CRON_SECRET
@@ -38,7 +43,7 @@ export async function GET(req: NextRequest) {
   const admin = createAdminClient()
   const now = new Date()
   const monthKey = toISODate(now).slice(0, 7)
-  const stats = { users: 0, predictions: 0, anomalies: 0, budgetAlerts: 0, reminders: 0, emails: 0, receiptsPurged: 0, errors: 0 }
+  const stats = { users: 0, predictions: 0, anomalies: 0, budgetAlerts: 0, reminders: 0, emails: 0, whatsapp: 0, receiptsPurged: 0, errors: 0 }
 
   const alertExists = async (userId: string, source: string) => {
     const { count } = await admin.from("alerts").select("id", { count: "exact", head: true }).eq("user_id", userId).eq("source", source)
@@ -133,7 +138,14 @@ export async function GET(req: NextRequest) {
       // 4. Recordatorios de vencimiento.
       const { data: reminders } = await admin.from("reminders").select("id, user_service_id, channel, days_before, last_sent_at").eq("user_id", userId)
       if (reminders?.length) {
-        let email: string | null | undefined
+        let contact: { email: string | null; phone: string | null } | undefined
+        const getContact = async () => {
+          if (!contact) {
+            const authUser = (await admin.auth.admin.getUserById(userId)).data.user
+            contact = { email: authUser?.email ?? null, phone: normalizeMxPhone(authUser?.user_metadata?.phone) }
+          }
+          return contact
+        }
         for (const r of reminders) {
           const service = (serviceRows ?? []).find((s) => s.id === r.user_service_id)
           const dueDay = parseDueDay(service?.due_date)
@@ -146,14 +158,24 @@ export async function GET(req: NextRequest) {
           const amount = service.last_amount ? ` Monto aproximado: ${money(Number(service.last_amount))}.` : ""
           const when = days === 0 ? "hoy" : days === 1 ? "mañana" : `en ${days} días`
           const title = `Tu recibo de ${label(service.service_type)} vence ${when}`
-          const body = `${service.provider ?? "Tu servicio"} vence el ${due.toLocaleDateString("es-MX", { day: "numeric", month: "long" })}.${amount}`
+          const dueLabel = due.toLocaleDateString("es-MX", { day: "numeric", month: "long" })
+          const body = `${service.provider ?? "Tu servicio"} vence el ${dueLabel}.${amount}`
 
           let sent = false
           if (r.channel === "push") {
             await createAlertAndPush({ userId, supabaseClient: admin, alertType: "info", title, message: body, url: "/dashboard/servicios" })
             sent = true
+          } else if (r.channel === "whatsapp") {
+            const { phone } = await getContact()
+            if (phone) {
+              sent = await sendWhatsAppTemplate({
+                to: phone,
+                params: [label(service.service_type), `${when} (${dueLabel})`, service.last_amount ? money(Number(service.last_amount)) : "por confirmar"],
+              })
+            }
+            if (sent) stats.whatsapp++
           } else {
-            if (email === undefined) email = (await admin.auth.admin.getUserById(userId)).data.user?.email ?? null
+            const { email } = await getContact()
             if (email) sent = await sendEmail({ to: email, subject: title, text: `${body}\n\nPaga desde PagoIA: ${process.env.NEXT_PUBLIC_APP_URL ?? ""}/dashboard/servicios` })
             if (sent) stats.emails++
           }
@@ -169,7 +191,17 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  // 5. Retención: las imágenes de recibos confirmados se borran a los 30 días.
+  // 5. Pagos automáticos (solo con llaves de prueba de Stripe, salvo AUTOPAY_ALLOW_LIVE=true).
+  if (autopayChargesAllowed()) {
+    try {
+      Object.assign(stats, await runAutopay(admin, (serviceRows ?? []) as ServiceRow[], now))
+    } catch (error) {
+      stats.errors++
+      console.error("[cron/daily] pagos automáticos:", error)
+    }
+  }
+
+  // 6. Retención: las imágenes de recibos confirmados se borran a los 30 días.
   const cutoff = new Date(now.getTime() - RECEIPT_RETENTION_DAYS * 86_400_000).toISOString()
   const { data: oldReceipts } = await admin
     .from("receipts")
@@ -185,4 +217,127 @@ export async function GET(req: NextRequest) {
   }
 
   return NextResponse.json({ ok: true, ...stats })
+}
+
+/**
+ * Cobra los recibos pendientes con pago automático. Antes de cobrar registra el intento en
+ * autopay_runs (pending_payment_id es único), así dos corridas simultáneas nunca cobran dos veces.
+ */
+async function runAutopay(admin: SupabaseClient, services: ServiceRow[], now: Date) {
+  const result = { autopayCharged: 0, autopayFailed: 0, autopaySkipped: 0 }
+  const { data: schedules, error } = await admin
+    .from("scheduled_payments")
+    .select("id, user_id, user_service_id, max_amount, days_before, active")
+    .eq("active", true)
+  if (error || !schedules?.length) return result
+
+  const userIds = [...new Set(schedules.map((s) => s.user_id as string))]
+  const [{ data: pendings }, { data: profiles }] = await Promise.all([
+    admin.from("pending_payments").select("id, user_id, service_type, provider, amount, due_date, status").in("user_id", userIds).eq("status", "pending"),
+    admin.from("payment_profiles").select("*").in("user_id", userIds),
+  ])
+  if (!pendings?.length) return result
+  const { data: runs } = await admin.from("autopay_runs").select("pending_payment_id").in("pending_payment_id", pendings.map((p) => p.id))
+
+  const decisions = planAutopay({
+    schedules: schedules as ScheduleRow[],
+    services,
+    pendings: pendings as PendingRow[],
+    attempted: new Set((runs ?? []).map((r) => r.pending_payment_id as string)),
+    today: now,
+  })
+  const stripe = getStripe()
+
+  const notifyOnce = async (userId: string, source: string, alert: Omit<Parameters<typeof createAlertAndPush>[0], "userId" | "supabaseClient" | "source">) => {
+    const { count } = await admin.from("alerts").select("id", { count: "exact", head: true }).eq("user_id", userId).eq("source", source)
+    if ((count ?? 0) === 0) await createAlertAndPush({ userId, supabaseClient: admin, source, ...alert })
+  }
+
+  for (const d of decisions) {
+    const { pending, schedule, amount } = d
+    const userId = schedule.user_id
+    const what = `${label(pending.service_type)}${pending.provider ? ` (${pending.provider})` : ""}`
+
+    if (d.kind !== "charge") {
+      result.autopaySkipped++
+      await notifyOnce(userId, `autopay-skip:${pending.id}`, {
+        alertType: "warning",
+        title: `No cobramos tu recibo de ${label(pending.service_type)}`,
+        message:
+          d.kind === "over_limit"
+            ? `El recibo es de ${money(amount)} y tu tope es de ${money(Number(schedule.max_amount))}. Págalo tú o sube el tope en Pagos automáticos.`
+            : `El recibo es de ${money(amount)} y Stripe no acepta cargos menores a $10. Págalo desde Mis Pagos.`,
+        url: "/dashboard/programados",
+      })
+      continue
+    }
+
+    const profile = (profiles ?? []).find((p) => p.user_id === userId) as PaymentProfile | undefined
+    if (!profile?.payment_method_id) {
+      result.autopaySkipped++
+      await notifyOnce(userId, `autopay-nocard:${pending.id}`, {
+        alertType: "warning",
+        title: "Tu pago automático no tiene tarjeta",
+        message: `Guarda una tarjeta en Pagos automáticos para cobrar tu recibo de ${what}.`,
+        url: "/dashboard/programados",
+      })
+      continue
+    }
+
+    // Reserva el intento. Si ya existe (otra corrida), no se cobra.
+    const { data: run, error: runError } = await admin
+      .from("autopay_runs")
+      .insert({ user_id: userId, scheduled_payment_id: schedule.id, pending_payment_id: pending.id, amount, status: "processing" })
+      .select("id")
+      .single()
+    if (runError || !run) continue
+
+    const charge = await chargeOffSession(stripe, profile, {
+      pendingPaymentId: pending.id,
+      amount,
+      serviceType: pending.service_type,
+      description: `Pago automático de ${what}`,
+    })
+    await admin
+      .from("autopay_runs")
+      .update({ status: charge.status, stripe_payment_intent: charge.paymentIntentId, reason: charge.status === "failed" ? charge.reason : null })
+      .eq("id", run.id)
+
+    if (charge.status === "failed") {
+      result.autopayFailed++
+      await createAlertAndPush({
+        userId,
+        supabaseClient: admin,
+        source: `autopay-failed:${pending.id}`,
+        alertType: "error",
+        title: `No se pudo cobrar tu recibo de ${label(pending.service_type)}`,
+        message: `${charge.reason} Monto: ${money(amount)}.`,
+        url: "/dashboard/servicios",
+      })
+      continue
+    }
+
+    result.autopayCharged++
+    await admin.from("transactions").insert({
+      user_id: userId,
+      service_type: pending.service_type,
+      provider: pending.provider ?? "Pago automático",
+      amount,
+      status: charge.status === "succeeded" ? "completed" : "pending",
+      receipt_number: charge.paymentIntentId,
+      transaction_date: now.toISOString(),
+    })
+    await admin.from("pending_payments").update({ status: "paid" }).eq("id", pending.id)
+    await admin.from("user_services").update({ status: "paid" }).eq("id", schedule.user_service_id).eq("user_id", userId)
+    await createAlertAndPush({
+      userId,
+      supabaseClient: admin,
+      source: `autopay-ok:${pending.id}`,
+      alertType: "success",
+      title: `✅ Pagamos tu recibo de ${label(pending.service_type)}`,
+      message: `Cobramos ${money(amount)} a tu tarjeta ${profile.card_brand ?? ""} •••• ${profile.card_last4 ?? ""}. El comprobante está en Historial.`,
+      url: "/dashboard/historial",
+    })
+  }
+  return result
 }

@@ -1,7 +1,8 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { ChevronLeft, ChevronRight, CheckCircle2, AlertTriangle, Clock, CircleDot, Bell, Mail } from "lucide-react"
+import { ChevronLeft, ChevronRight, CheckCircle2, AlertTriangle, Clock, CircleDot, Bell, Mail, MessageCircle } from "lucide-react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -26,7 +27,8 @@ const WEEKDAYS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]
 const DAY_OPTIONS = [0, 1, 2, 3, 5, 7]
 
 type Service = { id: string; service_type: string; provider: string | null; status: string }
-type Reminder = { user_service_id: string; channel: "push" | "email"; days_before: number }
+type Channel = "push" | "email" | "whatsapp"
+type Reminder = { user_service_id: string; channel: Channel; days_before: number }
 
 export function DueCalendar() {
   const { toast } = useToast()
@@ -35,6 +37,8 @@ export function DueCalendar() {
   const [services, setServices] = useState<Service[]>([])
   const [reminders, setReminders] = useState<Reminder[]>([])
   const [emailEnabled, setEmailEnabled] = useState(false)
+  const [whatsappEnabled, setWhatsappEnabled] = useState(false)
+  const [whatsappPhone, setWhatsappPhone] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
   const monthParam = toISODate(cursor).slice(0, 7)
@@ -50,6 +54,8 @@ export function DueCalendar() {
       setServices(cal.services ?? [])
       setReminders(rem.reminders ?? [])
       setEmailEnabled(Boolean(rem.emailEnabled))
+      setWhatsappEnabled(Boolean(rem.whatsappEnabled))
+      setWhatsappPhone(rem.whatsappPhone ?? null)
     } finally {
       setLoading(false)
     }
@@ -94,14 +100,15 @@ export function DueCalendar() {
 
   const todayISO = toISODate(new Date())
 
-  const saveReminder = async (serviceId: string, channels: ("push" | "email")[], days: number) => {
+  const saveReminder = async (serviceId: string, channels: Channel[], days: number) => {
     const res = await fetch("/api/reminders", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ user_service_id: serviceId, channels, days_before: days }),
     })
     if (!res.ok) {
-      toast({ title: "No se guardó el recordatorio", description: "Intenta de nuevo.", variant: "destructive" })
+      const { error } = await res.json().catch(() => ({ error: null }))
+      toast({ title: "No se guardó el recordatorio", description: error ?? "Intenta de nuevo.", variant: "destructive" })
       return
     }
     setReminders((prev) => [
@@ -213,6 +220,18 @@ export function DueCalendar() {
           <CardDescription>
             Elige cómo y cuántos días antes quieres que te avisemos de cada vencimiento.
             {!emailEnabled && " Los avisos por correo se activan cuando el servidor tenga configurado el envío de correos."}
+            {whatsappEnabled &&
+              (whatsappPhone ? (
+                ` Los avisos por WhatsApp llegan a ${whatsappPhone}.`
+              ) : (
+                <>
+                  {" "}Para recibir avisos por WhatsApp, agrega tu celular en{" "}
+                  <Link href="/dashboard/perfil" className="text-primary underline-offset-4 hover:underline">
+                    tu perfil
+                  </Link>
+                  .
+                </>
+              ))}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -224,7 +243,7 @@ export function DueCalendar() {
                 const mine = reminders.filter((r) => r.user_service_id === s.id)
                 const channels = mine.map((r) => r.channel)
                 const days = mine[0]?.days_before ?? 3
-                const toggle = (channel: "push" | "email", on: boolean) =>
+                const toggle = (channel: Channel, on: boolean) =>
                   saveReminder(s.id, on ? [...channels, channel] : channels.filter((c) => c !== channel), days)
                 return (
                   <li key={s.id} className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm">
@@ -240,6 +259,16 @@ export function DueCalendar() {
                         <Checkbox disabled={!emailEnabled} checked={channels.includes("email")} onCheckedChange={(v) => toggle("email", v === true)} />
                         <Mail className="h-4 w-4 text-muted-foreground" /> Correo
                       </label>
+                      {whatsappEnabled && (
+                        <label className={cn("flex items-center gap-2", !whatsappPhone && "opacity-50")}>
+                          <Checkbox
+                            disabled={!whatsappPhone}
+                            checked={channels.includes("whatsapp")}
+                            onCheckedChange={(v) => toggle("whatsapp", v === true)}
+                          />
+                          <MessageCircle className="h-4 w-4 text-muted-foreground" /> WhatsApp
+                        </label>
+                      )}
                       <Select
                         value={String(days)}
                         disabled={channels.length === 0}

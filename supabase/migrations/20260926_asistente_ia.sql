@@ -2,7 +2,7 @@
 -- Conversaciones, mensajes y un tope diario de tokens por usuario.
 
 create table if not exists public.ai_conversations (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   user_id     uuid not null references auth.users(id) on delete cascade,
   title       text,
   created_at  timestamptz default now()
@@ -10,7 +10,7 @@ create table if not exists public.ai_conversations (
 create index if not exists idx_ai_conversations_user on public.ai_conversations(user_id, created_at desc);
 
 create table if not exists public.ai_messages (
-  id               uuid primary key default uuid_generate_v4(),
+  id               uuid primary key default gen_random_uuid(),
   conversation_id  uuid not null references public.ai_conversations(id) on delete cascade,
   user_id          uuid not null references auth.users(id) on delete cascade,
   role             text not null check (role in ('user','assistant')),
