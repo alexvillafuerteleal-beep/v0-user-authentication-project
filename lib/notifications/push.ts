@@ -232,6 +232,7 @@ export async function createAlertAndPush({
   tag,
   sendPush = true,
   supabaseClient,
+  source,
 }: {
   userId: string
   title: string
@@ -241,6 +242,8 @@ export async function createAlertAndPush({
   tag?: string
   sendPush?: boolean
   supabaseClient?: DatabaseClient
+  /** Origen de la alerta (p. ej. "anomaly:water:2026-09"); sirve para no duplicarla. */
+  source?: string
 }) {
   const supabase = getSupabaseClient(supabaseClient)
 
@@ -250,6 +253,7 @@ export async function createAlertAndPush({
     message,
     alert_type: alertType,
     url: url || null,
+    ...(source ? { source } : {}),
   })
 
   if (error) {
