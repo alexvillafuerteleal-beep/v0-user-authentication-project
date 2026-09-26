@@ -192,7 +192,7 @@ export default function SoportePage() {
                 <Label htmlFor="message" className="text-foreground text-sm">Mensaje</Label>
                 <Textarea id="message" placeholder="¿En qué podemos ayudarte?" value={formMessage} onChange={(e) => setFormMessage(e.target.value)} rows={4} className="border-border bg-secondary/50 mt-1.5" />
               </div>
-              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white gap-2" disabled={!formName || !formEmail || !formMessage}>
+              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground gap-2" disabled={!formName || !formEmail || !formMessage}>
                 <Mail className="w-4 h-4" />
                 Enviar Mensaje
               </Button>
@@ -258,18 +258,18 @@ export default function SoportePage() {
           {/* Header */}
           <div className="bg-gradient-to-r from-primary to-primary/80 p-4 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
-                <Bot className="w-5 h-5 text-white" />
+              <div className="w-9 h-9 rounded-full bg-primary-foreground/15 flex items-center justify-center">
+                <Bot className="w-5 h-5 text-primary-foreground" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm leading-tight">Asistente IA PagoIA</p>
+                <p className="text-primary-foreground font-semibold text-sm leading-tight">Asistente IA PagoIA</p>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                  <p className="text-white/80 text-xs">En línea · 24/7</p>
+                  <p className="text-primary-foreground/80 text-xs">En línea · 24/7</p>
                 </div>
               </div>
             </div>
-            <button onClick={() => setChatOpen(false)} className="text-white/80 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10">
+            <button onClick={() => setChatOpen(false)} className="text-primary-foreground/80 hover:text-primary-foreground transition-colors p-1 rounded-lg hover:bg-primary-foreground/10">
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -286,7 +286,7 @@ export default function SoportePage() {
                 <div className="max-w-[78%] space-y-2">
                   <div className={`px-3.5 py-2.5 rounded-2xl whitespace-pre-wrap text-sm leading-relaxed ${
                     msg.role === "user"
-                      ? "bg-primary text-white rounded-br-sm"
+                      ? "bg-primary text-primary-foreground rounded-br-sm"
                       : "bg-card border border-border text-foreground rounded-bl-sm shadow-sm"
                   }`}>
                     {msg.text}
@@ -367,7 +367,7 @@ export default function SoportePage() {
       {!chatOpen && (
         <button
           onClick={() => setChatOpen(true)}
-          className="fixed bottom-6 right-6 group flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-3 rounded-full shadow-lg z-40 transition-all hover:shadow-primary/30 hover:shadow-xl"
+          className="fixed bottom-6 right-6 group flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-3 rounded-full shadow-lg z-40 transition-all hover:shadow-primary/30 hover:shadow-xl"
           title="Abrir asistente IA"
         >
           <Bot className="w-5 h-5" />

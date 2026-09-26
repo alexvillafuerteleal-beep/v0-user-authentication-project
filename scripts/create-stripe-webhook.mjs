@@ -4,6 +4,8 @@ import Stripe from "stripe"
 
 const WEBHOOK_EVENTS = [
   "checkout.session.completed",
+  "checkout.session.async_payment_succeeded",
+  "checkout.session.async_payment_failed",
   "payment_intent.requires_action",
   "payment_intent.succeeded",
   "payment_intent.payment_failed",

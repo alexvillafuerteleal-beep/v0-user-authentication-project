@@ -19,6 +19,7 @@ interface Message {
   isBot: boolean
   timestamp: Date
   action?: MessageAction
+  isError?: boolean
 }
 
 const quickPrompts = [
@@ -42,6 +43,8 @@ export function FloatingAIPaymentSupport() {
   ])
   const [inputValue, setInputValue] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [statusLabel, setStatusLabel] = useState<string | null>(null)
+  const [conversationId, setConversationId] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -57,58 +60,93 @@ export function FloatingAIPaymentSupport() {
     }
   }
 
+  /** Chatbot por palabras clave: respaldo cuando no hay sesión o no hay llave de IA. */
+  const askKeywordSupport = async (text: string, history: Message[]) => {
+    const response = await fetch("/api/ai-support", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text, history }),
+    })
+    if (!response.ok) throw new Error("Error en IA")
+    const data = await response.json()
+    return {
+      text: (data.response as string) || "No entendí tu pregunta. ¿Puedes ser más específico?",
+      action: (data.action as MessageAction | undefined) || undefined,
+    }
+  }
+
   const sendMessage = async (manualText?: string) => {
     const textToSend = (manualText ?? inputValue).trim()
     if (!textToSend) return
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      text: textToSend,
-      isBot: false,
-      timestamp: new Date(),
-    }
-
+    const userMessage: Message = { id: Date.now().toString(), text: textToSend, isBot: false, timestamp: new Date() }
+    const botId = (Date.now() + 1).toString()
+    const history = messages
     setMessages((prev) => [...prev, userMessage])
-    if (!manualText) {
-      setInputValue("")
-    }
+    if (!manualText) setInputValue("")
     setIsLoading(true)
+    setStatusLabel(null)
 
-    try {
-      const response = await fetch("/api/ai-support", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: textToSend,
-          history: messages,
-        }),
+    const updateBot = (patch: Partial<Message>) =>
+      setMessages((prev) => {
+        const exists = prev.some((m) => m.id === botId)
+        if (!exists) return [...prev, { id: botId, text: "", isBot: true, timestamp: new Date(), ...patch }]
+        return prev.map((m) => (m.id === botId ? { ...m, ...patch } : m))
       })
 
-      if (!response.ok) throw new Error("Error en IA")
+    try {
+      // Historial para el modelo: sin el saludo inicial ni los mensajes de error.
+      const apiMessages = [...history, userMessage]
+        .filter((m) => m.id !== "welcome" && !m.isError && m.text.trim())
+        .map((m) => ({ role: m.isBot ? "assistant" : "user", content: m.text }))
+      while (apiMessages.length > 0 && apiMessages[0].role !== "user") apiMessages.shift()
 
-      const data = await response.json()
+      const response = await fetch("/api/ai/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ conversationId: conversationId ?? undefined, messages: apiMessages.slice(-40) }),
+      })
 
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: data.response || "No entendí tu pregunta. ¿Puedes ser más específico?",
-        isBot: true,
-        timestamp: new Date(),
-        action: data.action || undefined,
+      if (!response.ok || !response.body) {
+        const data = await response.json().catch(() => ({}))
+        if (data.fallback) {
+          const reply = await askKeywordSupport(textToSend, history)
+          updateBot({ text: reply.text, action: reply.action })
+          return
+        }
+        throw new Error(data.error || "Error en IA")
       }
 
-      setMessages((prev) => [...prev, botMessage])
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ""
+      let text = ""
+      for (;;) {
+        const { value, done } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split("\n")
+        buffer = lines.pop() ?? ""
+        for (const line of lines) {
+          if (!line.trim()) continue
+          const event = JSON.parse(line)
+          if (event.type === "meta" && event.conversationId) setConversationId(event.conversationId)
+          else if (event.type === "status") setStatusLabel(event.label)
+          else if (event.type === "text") {
+            text += event.delta
+            setStatusLabel(null)
+            updateBot({ text })
+          } else if (event.type === "action") updateBot({ action: { type: "navigate", url: event.url, label: event.label } })
+          else if (event.type === "error") updateBot({ text: text ? `${text}\n\n${event.message}` : event.message, isError: !text })
+        }
+      }
+      if (!text) updateBot({ text: "No encontré una respuesta. ¿Puedes decirlo de otra forma?" })
     } catch (error) {
       console.error("Error en chat:", error)
-
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: "❌ Error al conectar. Intenta nuevamente o contacta soporte@pagoIA.com",
-        isBot: true,
-        timestamp: new Date(),
-      }
-      setMessages((prev) => [...prev, errorMessage])
+      updateBot({ text: "No pude conectarme con el asistente. Intenta de nuevo en unos segundos.", isError: true })
     } finally {
       setIsLoading(false)
+      setStatusLabel(null)
     }
   }
 
@@ -270,11 +308,11 @@ export function FloatingAIPaymentSupport() {
             </div>
           ))}
 
-          {isLoading && (
+          {isLoading && (statusLabel !== null || !messages[messages.length - 1]?.isBot) && (
             <div className="flex justify-start message-pop">
               <div className="bg-gradient-to-br from-blue-600/40 to-purple-600/30 border border-blue-400/50 px-4 py-2.5 rounded-xl rounded-bl-sm flex items-center gap-3 backdrop-blur-sm">
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-cyan-300" />
-                <span className="text-xs text-blue-100 font-medium">Analizando...</span>
+                <span className="text-xs text-blue-100 font-medium">{statusLabel ?? "Pensando…"}</span>
               </div>
             </div>
           )}

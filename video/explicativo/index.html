@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PagoIA · Video explicativo (50 s)</title>
+<!--
+  Composición del video explicativo. Se renderiza con: node scripts/render-video.mjs
+  Para verla en tiempo real, abre este archivo en el navegador con ?play al final de la URL.
+  El guion (6 escenas) está en docs/PAGOIA-2.md.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=block">
+<style>
+  :root {
+    --navy: #0a1929; --navy-2: #0f2238; --navy-3: #14304d; --line: #21405f;
+    --ink: #eaf2fa; --ink-2: #c3d2e2; --muted: #8fa3bd;
+    --teal: #00d4aa; --teal-ink: #2ee0bc; --blue: #0066ff; --spark: #f0479f;
+    --amber: #fbbf24; --red: #f87171; --green: #4ade80;
+    --luz: #c98500; --agua: #3987e5; --gas: #d95926; --internet: #199e70;
+    --paper: #f7f5ef; --paper-ink: #1b2533;
+    --display: "Bricolage Grotesque", system-ui, sans-serif;
+    --body: "Geist", system-ui, sans-serif;
+    --mono: "Geist Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--navy); }
+  body { font-family: var(--body); color: var(--ink); -webkit-font-smoothing: antialiased; }
+  .stage { position: relative; width: 1920px; height: 1080px; overflow: hidden;
+    background:
+      radial-gradient(1200px 700px at 78% 30%, rgba(0, 102, 255, .16), transparent 60%),
+      radial-gradient(900px 600px at 10% 90%, rgba(0, 212, 170, .10), transparent 60%),
+      var(--navy); }
+  .grid { position: absolute; inset: 0; opacity: .35;
+    background-image: linear-gradient(rgba(143,163,189,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(143,163,189,.08) 1px, transparent 1px);
+    background-size: 80px 80px; mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
+  .abs { position: absolute; }
+  .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  /* Encabezado de cada escena */
+  .head { position: absolute; left: 140px; top: 92px; }
+  .eyebrow { font-family: var(--mono); font-size: 22px; letter-spacing: .14em; text-transform: uppercase; color: var(--teal-ink); }
+  .title { font-family: var(--display); font-weight: 800; font-size: 92px; line-height: 1.02; letter-spacing: -.02em; margin-top: 10px; }
+
+  /* Subtítulos (el video se reproduce sin sonido) */
+  .caption { position: absolute; left: 50%; top: 948px; transform: translateX(-50%); max-width: 1400px; text-align: center;
+    font-size: 34px; font-weight: 500; line-height: 1.3; color: var(--ink); padding: 14px 30px; border-radius: 16px;
+    background: rgba(6, 18, 32, .78); border: 1px solid rgba(143,163,189,.18); white-space: nowrap; opacity: 0; }
+
+  /* Recibos de papel */
+  .paper { position: absolute; width: 280px; height: 400px; background: var(--paper); color: var(--paper-ink); padding: 26px 24px 40px;
+    box-shadow: 0 30px 60px rgba(0,0,0,.45);
+    -webkit-mask: linear-gradient(#000 0 0) top / 100% calc(100% - 14px) no-repeat, conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 28px 14px repeat-x; }
+  .paper .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 22px; }
+  .paper .brand i { width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; }
+  .paper .brand svg { width: 20px; height: 20px; fill: #fff; }
+  .paper .lines { margin-top: 22px; display: grid; gap: 10px; }
+  .paper .lines span { display: block; height: 10px; border-radius: 5px; background: #d9d5ca; }
+  .paper .lbl { margin-top: 26px; font-family: var(--mono); font-size: 13px; letter-spacing: .08em; color: #6b7280; text-transform: uppercase; }
+  .paper .amt { font-family: var(--mono); font-weight: 600; font-size: 40px; margin-top: 4px; }
+  .paper .due { margin-top: 14px; font-family: var(--mono); font-size: 16px; color: #374151; }
+  .stamp { position: absolute; left: 36px; top: 170px; transform: rotate(-16deg); border: 5px solid #dc2626; color: #dc2626; font-family: var(--mono);
+    font-weight: 600; font-size: 38px; letter-spacing: .12em; padding: 4px 16px; border-radius: 8px; opacity: 0; }
+
+  /* Teléfono */
+  .phone { position: absolute; left: 1320px; top: 262px; width: 330px; height: 650px; border-radius: 52px; background: #050d17;
+    border: 3px solid #2a4a6b; box-shadow: 0 40px 90px rgba(0,0,0,.55), inset 0 0 0 8px #050d17; }
+  .screen { position: absolute; inset: 12px; border-radius: 42px; overflow: hidden; background: var(--navy-2); }
+  .notch { position: absolute; top: 12px; left: 50%; width: 110px; height: 30px; margin-left: -55px; border-radius: 20px; background: #050d17; z-index: 5; }
+  .layer { position: absolute; inset: 0; }
+  .lock { background: linear-gradient(160deg, #13365a, #0a1929 60%); text-align: center; padding-top: 88px; }
+  .lock .time { font-family: var(--display); font-weight: 600; font-size: 84px; letter-spacing: -.02em; }
+  .lock .date { font-size: 18px; color: var(--ink-2); margin-top: 2px; }
+  .notif { position: absolute; left: 14px; right: 14px; top: 250px; background: rgba(234,242,250,.94); color: var(--paper-ink); border-radius: 22px;
+    padding: 14px 16px; text-align: left; display: grid; grid-template-columns: 38px 1fr; gap: 12px; box-shadow: 0 12px 30px rgba(0,0,0,.35); }
+  .notif .ic { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; }
+  .notif b { font-size: 16px; display: block; }
+  .notif p { font-size: 14px; line-height: 1.35; color: #334155; margin-top: 2px; }
+
+  .dash { padding: 58px 18px 18px; background: var(--navy); }
+  .dash .hi { font-size: 16px; color: var(--muted); }
+  .dash .tot { font-family: var(--mono); font-size: 36px; font-weight: 600; margin-top: 2px; }
+  .dash .sub { font-size: 13px; color: var(--muted); }
+  .rows { margin-top: 18px; display: grid; gap: 10px; }
+  .row { display: grid; grid-template-columns: 40px 1fr auto; align-items: center; gap: 10px; background: var(--navy-2); border: 1px solid var(--line);
+    border-radius: 16px; padding: 12px; }
+  .row i { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; }
+  .row i svg { width: 22px; height: 22px; fill: #fff; }
+  .row b { font-size: 15px; display: block; }
+  .row small { font-size: 12px; color: var(--muted); }
+  .row .m { font-family: var(--mono); font-size: 15px; font-weight: 600; text-align: right; }
+  .row .chip { display: inline-block; margin-top: 3px; font-size: 11px; font-family: var(--mono); padding: 1px 7px; border-radius: 999px; }
+
+  .cam { background: #02070d; }
+  .cam .shot { position: absolute; left: 34px; top: 120px; width: 238px; height: 340px; transform: rotate(-3deg); }
+  .cam .shot .paper { width: 238px; height: 340px; padding: 20px 18px 30px; box-shadow: none; }
+  .cam .shot .paper .amt { font-size: 32px; }
+  .corner { position: absolute; width: 36px; height: 36px; border: 4px solid var(--teal); }
+  .scanline { position: absolute; left: 20px; right: 20px; top: 110px; height: 4px; border-radius: 2px; background: var(--teal);
+    box-shadow: 0 0 24px 6px rgba(0,212,170,.55); opacity: 0; }
+  .flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+  .shutter { position: absolute; left: 50%; bottom: 34px; width: 70px; height: 70px; margin-left: -35px; border-radius: 50%; border: 5px solid #fff; }
+  .shutter::after { content: ""; position: absolute; inset: 5px; border-radius: 50%; background: #fff; }
+
+  /* Tarjetas */
+  .card { position: absolute; background: var(--navy-2); border: 1px solid var(--line); border-radius: 28px; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+  .card h3 { font-family: var(--display); font-weight: 800; font-size: 40px; letter-spacing: -.01em; }
+  .card .desc { color: var(--muted); font-size: 22px; margin-top: 6px; }
+
+  .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 22px; margin-top: 30px; }
+  .field { border: 1px solid var(--line); border-radius: 16px; padding: 14px 18px; background: rgba(10,25,41,.6); position: relative; }
+  .field .k { font-family: var(--mono); font-size: 15px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .field .v { font-size: 30px; font-weight: 600; margin-top: 4px; white-space: nowrap; overflow: hidden; }
+  .field .v.mono { font-size: 32px; }
+  .field.warn { border-color: rgba(251,191,36,.6); background: rgba(251,191,36,.08); }
+  .field.warn .hint { position: absolute; right: 16px; top: 14px; font-size: 15px; color: var(--amber); font-weight: 600; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 64px; padding: 0 30px; border-radius: 16px;
+    background: var(--teal); color: var(--navy); font-weight: 700; font-size: 26px; position: relative; overflow: hidden; }
+  .btn .alt { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--green); opacity: 0; }
+
+  .legend { display: flex; gap: 24px; margin-top: 10px; font-size: 18px; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .legend i { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+  .chart { position: absolute; left: 40px; top: 150px; }
+  .callout { position: absolute; background: var(--spark); color: #fff; border-radius: 14px; padding: 10px 16px; font-weight: 600; font-size: 22px; white-space: nowrap; }
+  .callout b { font-family: var(--mono); font-size: 26px; }
+
+  .alert { display: grid; grid-template-columns: 60px 1fr; gap: 18px; padding: 28px; }
+  .alert .ic { width: 60px; height: 60px; border-radius: 16px; background: rgba(251,191,36,.15); display: grid; place-items: center; }
+  .alert b { font-size: 28px; display: block; line-height: 1.2; }
+  .alert p { color: var(--ink-2); font-size: 20px; line-height: 1.4; margin-top: 8px; }
+
+  .seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--navy); border: 1px solid var(--line); border-radius: 16px; padding: 6px; position: relative; margin-top: 26px; }
+  .seg span { position: relative; z-index: 1; text-align: center; font-size: 22px; font-weight: 600; padding: 12px 0; }
+  .seg .ind { position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc(50% - 6px); border-radius: 12px; background: var(--navy-3); border: 1px solid var(--teal); }
+  .method { margin-top: 18px; height: 70px; position: relative; }
+  .method > div { position: absolute; inset: 0; display: flex; align-items: center; gap: 14px; font-size: 22px; color: var(--ink-2); border: 1px dashed var(--line); border-radius: 14px; padding: 0 18px; }
+  .spinner { width: 26px; height: 26px; border-radius: 50%; border: 4px solid rgba(10,25,41,.3); border-top-color: var(--navy); opacity: 0; }
+
+  .slot { position: absolute; left: 1060px; top: 300px; width: 560px; height: 28px; border-radius: 14px; background: #050d17; border: 2px solid #2a4a6b; z-index: 3; }
+  .tray { position: absolute; left: 1100px; top: 314px; width: 480px; height: 560px; overflow: hidden; }
+  .receipt { position: absolute; left: 0; top: 0; width: 480px; height: 540px; background: var(--paper); color: var(--paper-ink); padding: 44px 36px 50px;
+    -webkit-mask: linear-gradient(#000 0 0) top / 100% calc(100% - 16px) no-repeat, conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 32px 16px repeat-x; }
+  .receipt .rh { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 24px; }
+  .receipt dl { margin-top: 26px; display: grid; grid-template-columns: auto 1fr; gap: 12px 18px; font-size: 20px; }
+  .receipt dt { color: #6b7280; }
+  .receipt dd { text-align: right; font-family: var(--mono); }
+  .receipt .big { margin-top: 22px; border-top: 2px dashed #cfcabd; padding-top: 18px; display: flex; justify-content: space-between; align-items: baseline; }
+  .receipt .big span { color: #6b7280; font-size: 20px; }
+  .receipt .big b { font-family: var(--mono); font-size: 44px; }
+  .paid { position: absolute; left: 36px; bottom: 44px; display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 26px; color: #047857; }
+  .paid svg { width: 54px; height: 54px; }
+
+  .push { position: absolute; left: 1250px; top: 70px; width: 560px; background: rgba(234,242,250,.96); color: var(--paper-ink); border-radius: 24px;
+    padding: 18px 20px; display: grid; grid-template-columns: 52px 1fr; gap: 16px; box-shadow: 0 20px 50px rgba(0,0,0,.45); }
+  .push .app { width: 52px; height: 52px; border-radius: 14px; background: var(--navy); display: grid; place-items: center; }
+  .push small { font-size: 16px; color: #64748b; }
+  .push b { display: block; font-size: 22px; margin-top: 2px; }
+  .push p { font-size: 18px; color: #334155; line-height: 1.35; margin-top: 2px; }
+
+  .endlogo { position: absolute; left: 50%; top: 210px; width: 230px; height: 230px; margin-left: -115px; }
+  .wordmark { position: absolute; left: 0; right: 0; top: 470px; text-align: center; font-family: var(--display); font-weight: 800; font-size: 128px; letter-spacing: -.02em; }
+  .wordmark span { color: var(--teal-ink); }
+  .tagline { position: absolute; left: 0; right: 0; top: 640px; text-align: center; font-size: 50px; color: var(--ink-2); font-weight: 500; }
+  .cta { position: absolute; left: 50%; top: 760px; transform: translateX(-50%); background: var(--teal); color: var(--navy); font-weight: 700; font-size: 36px;
+    padding: 20px 44px; border-radius: 999px; white-space: nowrap; }
+  .disclaimer { position: absolute; left: 0; right: 0; top: 1010px; text-align: center; font-size: 18px; color: var(--muted); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="16" y1="8" x2="55.5" y2="57.5">
+      <stop offset="0" stop-color="#00D4AA"/><stop offset="1" stop-color="#0066FF"/>
+    </linearGradient>
+    <symbol id="i-luz" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+    <symbol id="i-agua" viewBox="0 0 24 24"><path d="M12 2.5s-6 6.8-6 11a6 6 0 0 0 12 0c0-4.2-6-11-6-11z"/></symbol>
+    <symbol id="i-gas" viewBox="0 0 24 24"><path d="M12 2c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5.3 1.6 1.2 2.6 2.3 3C11 8 11 5 12 2z"/></symbol>
+    <symbol id="i-net" viewBox="0 0 24 24"><path fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" d="M2.5 9a14 14 0 0 1 19 0M5.5 12.5a9.5 9.5 0 0 1 13 0M8.8 16a5 5 0 0 1 6.4 0"/><circle cx="12" cy="19.3" r="1.6"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3 1.8 20.5h20.4z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.5" r="1.3" fill="currentColor"/></symbol>
+    <symbol id="i-mark" viewBox="9.75 6.75 52 52">
+      <path fill="url(#g)" d="M16 8H28V56l-3-3-3 3-3-3-3 3Z"/>
+      <path fill="url(#g)" d="M27.5 8H38a14 14 0 0 1 0 28H27.5V27.5H37a5.5 5.5 0 0 0 0-11H27.5Z"/>
+      <path fill="#F0479F" d="M48 42.5Q49.2 48.8 55.5 50Q49.2 51.2 48 57.5Q46.8 51.2 40.5 50Q46.8 48.8 48 42.5Z"/>
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 1Q13.6 10.4 23 12Q13.6 13.6 12 23Q10.4 13.6 1 12Q10.4 10.4 12 1Z"/></symbol>
+  </defs>
+</svg>
+
+<div class="stage" id="stage">
+  <div class="grid"></div>
+
+  <!-- Encabezados -->
+  <div class="head" id="h1"><div class="eyebrow">El problema</div><div class="title">¿Otra vez recargo?</div></div>
+  <div class="head" id="h2"><div class="eyebrow">01 · Un solo lugar</div><div class="title">Todo en un panel</div></div>
+  <div class="head" id="h3"><div class="eyebrow">02 · Captura con IA</div><div class="title">Escanea tu recibo</div></div>
+  <div class="head" id="h4"><div class="eyebrow">03 · Pronóstico</div><div class="title">Sabe lo que viene</div></div>
+  <div class="head" id="h5"><div class="eyebrow">04 · Pago</div><div class="title">Paga en un clic</div></div>
+
+  <!-- Escena 1: recibos sobre la mesa -->
+  <div class="paper" id="r1" style="left:330px;top:340px">
+    <div class="brand"><i style="background:var(--luz)"><svg><use href="#i-luz"/></svg></i>CFE · Luz</div>
+    <div class="lines"><span style="width:90%"></span><span style="width:70%"></span><span style="width:80%"></span></div>
+    <div class="lbl">Total a pagar</div><div class="amt">$512.30</div><div class="due">Fecha límite: 12 OCT</div>
+    <div class="stamp" id="stamp">VENCIDO</div>
+  </div>
+  <div class="paper" id="r2" style="left:570px;top:300px">
+    <div class="brand"><i style="background:var(--agua)"><svg><use href="#i-agua"/></svg></i>Agua</div>
+    <div class="lines"><span style="width:85%"></span><span style="width:60%"></span><span style="width:75%"></span></div>
+    <div class="lbl">Total a pagar</div><div class="amt">$238.00</div><div class="due">Fecha límite: 18 OCT</div>
+  </div>
+  <div class="paper" id="r3" style="left:810px;top:360px">
+    <div class="brand"><i style="background:var(--gas)"><svg><use href="#i-gas"/></svg></i>Gas natural</div>
+    <div class="lines"><span style="width:80%"></span><span style="width:65%"></span><span style="width:88%"></span></div>
+    <div class="lbl">Total a pagar</div><div class="amt">$410.00</div><div class="due">Fecha límite: 22 OCT</div>
+  </div>
+
+  <!-- Escena 2: total -->
+  <div class="abs" id="s2left" style="left:140px;top:330px;width:1080px">
+    <div style="font-size:30px;color:var(--ink-2)">Por pagar en octubre</div>
+    <div class="mono" id="bigTotal" style="font-size:150px;font-weight:600;letter-spacing:-.03em;line-height:1.1">$0.00</div>
+    <div id="chips" style="display:flex;gap:14px;margin-top:22px">
+      <span class="chipbig" style="--c:var(--luz)">Luz</span><span class="chipbig" style="--c:var(--agua)">Agua</span>
+      <span class="chipbig" style="--c:var(--gas)">Gas</span><span class="chipbig" style="--c:var(--internet)">Internet</span>
+    </div>
+    <div id="s2line" style="font-size:30px;color:var(--ink-2);margin-top:34px">4 servicios · 1 app · <span style="color:var(--teal-ink);font-weight:600">0 recargos</span></div>
+  </div>
+  <style>
+    .chipbig { display: inline-flex; align-items: center; gap: 10px; font-size: 26px; font-weight: 600; padding: 10px 20px; border-radius: 999px;
+      border: 1px solid var(--line); background: var(--navy-2); }
+    .chipbig::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--c); }
+  </style>
+
+  <!-- Teléfono (escenas 1 a 3) -->
+  <div class="phone" id="phone">
+    <div class="screen">
+      <div class="notch"></div>
+      <div class="layer lock" id="lock">
+        <div class="time">9:41</div>
+        <div class="date">martes 13 de octubre</div>
+        <div class="notif" id="notif">
+          <div class="ic" style="background:#dc2626;color:#fff"><svg width="22" height="22"><use href="#i-warn"/></svg></div>
+          <div><b>Pago vencido</b><p>Tu recibo de luz venció ayer. Se aplicará un recargo de $85.00.</p></div>
+        </div>
+      </div>
+      <div class="layer dash" id="dash">
+        <div class="hi">Hola, Ana</div>
+        <div class="tot mono">$1,659.30</div>
+        <div class="sub">por pagar este mes</div>
+        <div class="rows">
+          <div class="row"><i style="background:var(--luz)"><svg><use href="#i-luz"/></svg></i><div><b>Luz · CFE</b><span class="chip" style="background:rgba(251,191,36,.15);color:var(--amber)">Vence en 2 días</span></div><div class="m">$512.30</div></div>
+          <div class="row"><i style="background:var(--agua)"><svg><use href="#i-agua"/></svg></i><div><b>Agua</b><small>Vence 18 oct</small></div><div class="m">$238.00</div></div>
+          <div class="row"><i style="background:var(--gas)"><svg><use href="#i-gas"/></svg></i><div><b>Gas natural</b><small>Vence 22 oct</small></div><div class="m">$410.00</div></div>
+          <div class="row"><i style="background:var(--internet)"><svg><use href="#i-net"/></svg></i><div><b>Internet</b><small>Vence 25 oct</small></div><div class="m">$499.00</div></div>
+        </div>
+      </div>
+      <div class="layer cam" id="cam">
+        <div class="shot">
+          <div class="paper">
+            <div class="brand"><i style="background:var(--luz)"><svg><use href="#i-luz"/></svg></i>CFE · Luz</div>
+            <div class="lines"><span style="width:90%"></span><span style="width:70%"></span><span style="width:80%"></span></div>
+            <div class="lbl">Total a pagar</div><div class="amt">$512.30</div><div class="due">Fecha límite: 12 OCT</div>
+          </div>
+        </div>
+        <div class="corner" style="left:22px;top:100px;border-right:0;border-bottom:0;border-radius:10px 0 0 0"></div>
+        <div class="corner" style="right:22px;top:100px;border-left:0;border-bottom:0;border-radius:0 10px 0 0"></div>
+        <div class="corner" style="left:22px;top:450px;border-right:0;border-top:0;border-radius:0 0 0 10px"></div>
+        <div class="corner" style="right:22px;top:450px;border-left:0;border-top:0;border-radius:0 0 10px 0"></div>
+        <div class="scanline" id="scan"></div>
+        <div class="shutter"></div>
+        <div class="flash" id="flash"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Escena 3: campos capturados -->
+  <svg class="abs" id="spark" width="70" height="70" style="left:1540px;top:250px;fill:var(--spark);opacity:0"><use href="#i-spark"/></svg>
+  <div class="card" id="extract" style="left:720px;top:290px;width:1060px;padding:40px 44px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div><h3>Capturamos tu recibo</h3><div class="desc">Revisa que los datos sean correctos antes de guardar.</div></div>
+      <svg width="46" height="46" style="fill:var(--spark)"><use href="#i-spark"/></svg>
+    </div>
+    <div class="fields">
+      <div class="field"><div class="k">Servicio</div><div class="v">Luz · CFE</div></div>
+      <div class="field"><div class="k">Periodo</div><div class="v">12 ago – 11 oct</div></div>
+      <div class="field"><div class="k">Fecha límite</div><div class="v">12 oct 2026</div></div>
+      <div class="field"><div class="k">Monto</div><div class="v mono">$512.30</div></div>
+      <div class="field warn" id="warnField"><div class="k">Consumo</div><div class="v mono">312 kWh</div><div class="hint">Revisa este dato</div></div>
+      <div class="field"><div class="k">No. de servicio</div><div class="v mono">•••• 4821</div></div>
+    </div>
+    <div style="margin-top:30px"><div class="btn" id="saveBtn">Confirmar y guardar<div class="alt">Guardado ✓</div></div></div>
+  </div>
+
+  <!-- Escena 4: pronóstico -->
+  <div class="card" id="chartCard" style="left:140px;top:290px;width:1040px;height:600px;padding:36px 40px">
+    <h3>Luz · CFE, por bimestre</h3>
+    <div class="legend"><span><i style="background:var(--teal)"></i>Pagado</span><span><i style="background:var(--spark)"></i>Pronóstico</span></div>
+    <svg class="chart" width="960" height="420" viewBox="0 0 960 420">
+      <g stroke="rgba(143,163,189,.18)" stroke-width="1">
+        <line x1="0" y1="380" x2="960" y2="380"/><line x1="0" y1="290" x2="960" y2="290"/><line x1="0" y1="200" x2="960" y2="200"/><line x1="0" y1="110" x2="960" y2="110"/>
+      </g>
+      <g font-family="Geist Mono, monospace" font-size="18" fill="#8fa3bd">
+        <text x="0" y="372">$0</text><text x="0" y="282">$150</text><text x="0" y="192">$300</text><text x="0" y="102">$450</text>
+      </g>
+      <g id="bars">
+        <rect x="100" y="138.8" width="110" height="241.2" rx="6" fill="#00d4aa"/>
+        <rect x="270" y="107" width="110" height="273" rx="6" fill="#00d4aa"/>
+        <rect x="440" y="99.2" width="110" height="280.8" rx="6" fill="#00d4aa"/>
+        <rect x="610" y="83" width="110" height="297" rx="6" fill="#00d4aa"/>
+        <rect x="780" y="72.8" width="110" height="307.2" rx="6" fill="#f0479f" fill-opacity=".85"/>
+      </g>
+      <g id="whisker" stroke="#eaf2fa" stroke-width="3" stroke-linecap="round">
+        <line x1="835" y1="48.8" x2="835" y2="96.8"/><line x1="815" y1="48.8" x2="855" y2="48.8"/><line x1="815" y1="96.8" x2="855" y2="96.8"/>
+      </g>
+      <g font-family="Geist, sans-serif" font-size="19" fill="#c3d2e2" text-anchor="middle">
+        <text x="155" y="408">feb–mar</text><text x="325" y="408">abr–may</text><text x="495" y="408">jun–jul</text><text x="665" y="408">ago–sep</text><text x="835" y="408" fill="#f0479f" font-weight="600">oct–nov</text>
+      </g>
+    </svg>
+    <div class="callout" id="callout" style="left:600px;top:128px">Próximo recibo: <b id="fc">$512</b> <span style="opacity:.85">± $40</span></div>
+  </div>
+  <div class="card alert" id="alertCard" style="left:1240px;top:430px;width:560px">
+    <div class="ic" style="color:var(--amber)"><svg width="34" height="34"><use href="#i-warn"/></svg></div>
+    <div><b>Tu consumo de agua subió 22%</b><p>Este bimestre usaste 31 m³; lo normal son 25 m³. Revisa si hay una fuga.</p></div>
+  </div>
+
+  <!-- Escena 5: pago -->
+  <div class="card" id="payCard" style="left:200px;top:300px;width:640px;padding:36px 40px">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="width:56px;height:56px;border-radius:16px;background:var(--luz);display:grid;place-items:center"><svg width="30" height="30" style="fill:#fff"><use href="#i-luz"/></svg></div>
+      <div><div style="font-size:28px;font-weight:700">Luz · CFE</div><div style="font-size:20px;color:var(--muted)">Vence el 12 de octubre</div></div>
+      <div class="mono" style="margin-left:auto;font-size:40px;font-weight:600">$512.30</div>
+    </div>
+    <div class="seg"><div class="ind" id="segInd"></div><span>Tarjeta</span><span>OXXO</span></div>
+    <div class="method">
+      <div id="mCard"><svg width="40" height="28" viewBox="0 0 40 28"><rect width="40" height="28" rx="5" fill="#1a3350"/><rect y="7" width="40" height="5" fill="#0a1929"/></svg>Visa <span class="mono">•••• 4242</span></div>
+      <div id="mOxxo" style="opacity:0">Ficha para pagar en efectivo · vence en 3 días</div>
+    </div>
+    <div style="margin-top:26px"><div class="btn" id="payBtn" style="width:100%">Pagar <span class="mono">$512.30</span><div class="spinner" id="spin"></div></div></div>
+  </div>
+  <div class="slot" id="slot"></div>
+  <div class="tray" id="tray">
+    <div class="receipt" id="receipt">
+      <div class="rh"><svg width="40" height="40"><use href="#i-mark"/></svg>Comprobante de pago</div>
+      <dl>
+        <dt>Servicio</dt><dd>Luz · CFE</dd>
+        <dt>Fecha</dt><dd>13 oct 2026 · 09:42</dd>
+        <dt>Método</dt><dd>Visa •••• 4242</dd>
+        <dt>Folio</dt><dd>PGI-7F3A9C</dd>
+      </dl>
+      <div class="big"><span>Total</span><b>$512.30</b></div>
+      <div class="paid">
+        <svg viewBox="0 0 54 54"><circle cx="27" cy="27" r="25" fill="#d1fae5"/>
+          <path id="rcSpark" fill="#c2177a" d="M27 11Q28.6 25.4 43 27Q28.6 28.6 27 43Q25.4 28.6 11 27Q25.4 25.4 27 11Z"/>
+          <path id="rcCheck" d="M16 28l7.5 7.5L39 20" fill="none" stroke="#047857" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="40" stroke-dashoffset="40"/>
+        </svg>
+        <span id="paidLbl" style="opacity:0">Pagado</span>
+      </div>
+    </div>
+  </div>
+  <div class="push" id="push">
+    <div class="app"><svg width="36" height="36"><use href="#i-mark"/></svg></div>
+    <div><small>PagoIA · ahora</small><b>✅ Pago de Luz completado</b><p>Se procesó tu pago de $512.30 MXN. Descarga tu comprobante desde Historial.</p></div>
+  </div>
+
+  <!-- Escena 6: cierre -->
+  <svg class="endlogo" id="endlogo" viewBox="9.75 6.75 52 52">
+    <path id="lStem" fill="url(#g)" d="M16 8H28V56l-3-3-3 3-3-3-3 3Z"/>
+    <path id="lBowl" fill="url(#g)" d="M27.5 8H38a14 14 0 0 1 0 28H27.5V27.5H37a5.5 5.5 0 0 0 0-11H27.5Z"/>
+    <path id="lSpark" fill="#F0479F" d="M48 42.5Q49.2 48.8 55.5 50Q49.2 51.2 48 57.5Q46.8 51.2 40.5 50Q46.8 48.8 48 42.5Z"/>
+  </svg>
+  <div class="wordmark" id="wordmark">Pago<span>IA</span></div>
+  <div class="tagline" id="tagline">Tus servicios, sin sorpresas.</div>
+  <div class="cta" id="cta">Regístrate gratis</div>
+  <div class="disclaimer" id="disclaimer">CFE y las demás marcas pertenecen a sus dueños; PagoIA no está afiliado a ellas. Montos ilustrativos.</div>
+
+  <!-- Subtítulos -->
+  <div class="caption" id="c1">Luz, agua, gas, internet… cada recibo llega distinto y vence en otra fecha.</div>
+  <div class="caption" id="c2">PagoIA junta todos tus servicios en un solo lugar.</div>
+  <div class="caption" id="c3">Tómale foto a tu recibo y la IA captura el monto y la fecha límite por ti.</div>
+  <div class="caption" id="c4">Te dice cuánto vas a pagar y te avisa si algo se sale de lo normal.</div>
+  <div class="caption" id="c5">Paga con tarjeta u OXXO y recibe tu comprobante al instante.</div>
+</div>
+
+<script src="../../node_modules/gsap/dist/gsap.min.js"></script>
+<script>
+  const DURATION = 50
+  const $ = (s) => document.querySelector(s)
+  const $$ = (s) => [...document.querySelectorAll(s)]
+  const mxn = (n, d = 2) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d })
+
+  // Estado inicial: todo lo que aparece después empieza oculto.
+  gsap.set(["#h2", "#h3", "#h4", "#h5", "#s2left", "#dash", "#cam", "#extract", "#chartCard", "#alertCard", "#payCard", "#slot", "#push",
+    "#endlogo", "#wordmark", "#tagline", "#cta", "#disclaimer"], { autoAlpha: 0 })
+  gsap.set("#receipt", { yPercent: -100 })
+  gsap.set("#bars rect", { scaleY: 0, transformOrigin: "50% 100%" })
+  gsap.set("#whisker, #callout", { autoAlpha: 0 })
+  gsap.set("#notif", { autoAlpha: 0, y: -24 })
+  gsap.set("#r1", { rotation: -9 }); gsap.set("#r2", { rotation: 5 }); gsap.set("#r3", { rotation: 12 })
+
+  const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } })
+
+  const headIn = (id, at) => tl.fromTo(id, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.6 }, at)
+  const headOut = (id, at) => tl.to(id, { autoAlpha: 0, y: -30, duration: 0.4, ease: "power2.in" }, at)
+  const caption = (id, from, to) => {
+    tl.fromTo(id, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.4 }, from)
+    tl.to(id, { autoAlpha: 0, duration: 0.3, ease: "power1.in" }, to - 0.3)
+  }
+  const countUp = (el, from, to, at, duration, fmt) => {
+    const o = { v: from }
+    tl.to(o, { v: to, duration, ease: "power2.out", onUpdate: () => (el.textContent = fmt(o.v)) }, at)
+  }
+
+  // 1 · El problema (0–6 s)
+  headIn("#h1", 0.9)
+  tl.from(["#r1", "#r2", "#r3"], { y: -760, rotation: (i) => [-30, 25, 40][i], duration: 1.0, stagger: 0.22 }, 0.1)
+  tl.from("#phone", { x: 620, duration: 1.0 }, 1.2)
+  tl.to("#notif", { autoAlpha: 1, y: 0, duration: 0.5, ease: "back.out(1.6)" }, 2.4)
+  tl.to("#phone", { keyframes: { x: [0, -9, 9, -9, 9, -7, 7, -4, 0] }, duration: 0.8, ease: "none" }, 2.9)
+  tl.fromTo("#stamp", { autoAlpha: 0, scale: 1.8 }, { autoAlpha: 1, scale: 1, duration: 0.35, ease: "power4.in" }, 3.9)
+  caption("#c1", 0.4, 5.8)
+
+  // 2 · Todo en un panel (6–14 s)
+  headOut("#h1", 5.9)
+  headIn("#h2", 6.3)
+  ;[["#r1", 470, 540], ["#r2", 710, 500], ["#r3", 950, 560]].forEach(([id, cx, cy], i) => {
+    tl.to(id, { x: 1485 - cx, y: 587 - cy, rotation: 0, scale: 0.12, autoAlpha: 0, duration: 0.8, ease: "power2.in" }, 6.1 + i * 0.12)
+  })
+  tl.to("#lock", { autoAlpha: 0, duration: 0.4 }, 6.9)
+  tl.to("#dash", { autoAlpha: 1, duration: 0.4 }, 7.0)
+  tl.from("#dash .row", { x: 40, autoAlpha: 0, duration: 0.5, stagger: 0.14 }, 7.2)
+  tl.to("#s2left", { autoAlpha: 1, duration: 0.5 }, 7.2)
+  countUp($("#bigTotal"), 0, 1659.3, 7.4, 1.4, (v) => mxn(v))
+  tl.from("#chips .chipbig", { y: 20, autoAlpha: 0, duration: 0.45, stagger: 0.12 }, 8.4)
+  tl.from("#s2line", { y: 20, autoAlpha: 0, duration: 0.5 }, 9.6)
+  caption("#c2", 6.4, 13.8)
+
+  // 3 · Escanea tu recibo (14–24 s)
+  headOut("#h2", 13.8)
+  headIn("#h3", 14.3)
+  tl.to("#s2left", { autoAlpha: 0, x: -40, duration: 0.4, ease: "power2.in" }, 13.8)
+  tl.to("#phone", { x: -1080, duration: 1.0, ease: "power3.inOut" }, 14.0)
+  tl.to("#dash", { autoAlpha: 0, duration: 0.3 }, 14.4)
+  tl.to("#cam", { autoAlpha: 1, duration: 0.3 }, 14.5)
+  tl.set("#scan", { autoAlpha: 1 }, 15.1)
+  tl.fromTo("#scan", { y: 0 }, { y: 360, duration: 1.4, ease: "power1.inOut" }, 15.1)
+  tl.set("#scan", { autoAlpha: 0 }, 16.55)
+  tl.fromTo("#flash", { opacity: 0.85 }, { opacity: 0, duration: 0.35, ease: "power1.out", immediateRender: false }, 16.6)
+  tl.fromTo("#spark", { autoAlpha: 0, scale: 0, rotation: -90, left: 520, top: 300 },
+    { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.4, ease: "back.out(2.2)" }, 16.9)
+  tl.to("#spark", { left: 1688, top: 332, scale: 0.66, duration: 0.6, ease: "power2.in" }, 17.35)
+  tl.set("#spark", { autoAlpha: 0 }, 17.95)
+  tl.fromTo("#extract", { autoAlpha: 0, x: 60 }, { autoAlpha: 1, x: 0, duration: 0.6 }, 17.0)
+  $$("#extract .field").forEach((f, i) => {
+    const at = 17.6 + i * 0.35
+    tl.from(f, { autoAlpha: 0, y: 14, duration: 0.3 }, at)
+    tl.fromTo(f.querySelector(".v"), { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.45, ease: "power1.out" }, at + 0.1)
+  })
+  tl.from("#warnField .hint", { autoAlpha: 0, duration: 0.3 }, 19.9)
+  tl.fromTo("#warnField", { boxShadow: "0 0 0 0 rgba(251,191,36,.7)" }, { boxShadow: "0 0 0 14px rgba(251,191,36,0)", duration: 0.8, ease: "power1.out" }, 20.1)
+  tl.from("#saveBtn", { autoAlpha: 0, y: 14, duration: 0.4 }, 20.6)
+  tl.to("#saveBtn", { scale: 0.95, duration: 0.12, ease: "power1.in" }, 22.1).to("#saveBtn", { scale: 1, duration: 0.25, ease: "back.out(3)" }, 22.22)
+  tl.to("#saveBtn .alt", { autoAlpha: 1, duration: 0.25 }, 22.3)
+  caption("#c3", 14.4, 23.8)
+
+  // 4 · Sabe lo que viene (24–34 s)
+  headOut("#h3", 23.8)
+  headIn("#h4", 24.3)
+  tl.to("#phone", { x: -1700, autoAlpha: 0, duration: 0.6, ease: "power2.in" }, 23.9)
+  tl.to("#extract", { autoAlpha: 0, x: 60, duration: 0.4, ease: "power2.in" }, 23.9)
+  tl.fromTo("#chartCard", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.6 }, 24.4)
+  tl.to("#bars rect", { scaleY: 1, duration: 0.7, stagger: 0.18, ease: "power2.out" }, 24.9)
+  tl.fromTo("#whisker", { autoAlpha: 0, scaleY: 0, svgOrigin: "835 72.8" }, { autoAlpha: 1, scaleY: 1, duration: 0.4 }, 26.4)
+  tl.fromTo("#callout", { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.45, ease: "back.out(1.8)" }, 26.8)
+  countUp($("#fc"), 400, 512, 26.8, 0.9, (v) => mxn(v, 0))
+  tl.fromTo("#alertCard", { autoAlpha: 0, x: 80 }, { autoAlpha: 1, x: 0, duration: 0.6 }, 29.0)
+  tl.fromTo("#alertCard", { boxShadow: "0 0 0 0 rgba(240,71,159,.75), 0 30px 80px rgba(0,0,0,.35)" },
+    { boxShadow: "0 0 0 18px rgba(240,71,159,0), 0 30px 80px rgba(0,0,0,.35)", duration: 0.9, ease: "power1.out" }, 29.7)
+  caption("#c4", 24.4, 33.8)
+
+  // 5 · Paga en un clic (34–44 s)
+  headOut("#h4", 33.8)
+  headIn("#h5", 34.3)
+  tl.to(["#chartCard", "#alertCard"], { autoAlpha: 0, y: 30, duration: 0.4, ease: "power2.in", stagger: 0.06 }, 33.8)
+  tl.fromTo("#payCard", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.6 }, 34.4)
+  tl.to("#slot", { autoAlpha: 1, duration: 0.4 }, 34.8)
+  tl.to("#segInd", { xPercent: 100, duration: 0.45, ease: "power2.inOut" }, 35.6)
+  tl.to("#mCard", { autoAlpha: 0, duration: 0.2 }, 35.7).to("#mOxxo", { autoAlpha: 1, duration: 0.25 }, 35.85)
+  tl.to("#segInd", { xPercent: 0, duration: 0.45, ease: "power2.inOut" }, 36.7)
+  tl.to("#mOxxo", { autoAlpha: 0, duration: 0.2 }, 36.8).to("#mCard", { autoAlpha: 1, duration: 0.25 }, 36.95)
+  tl.to("#payBtn", { scale: 0.96, duration: 0.12, ease: "power1.in" }, 37.5).to("#payBtn", { scale: 1, duration: 0.25, ease: "back.out(3)" }, 37.62)
+  tl.to("#spin", { opacity: 1, rotation: 540, duration: 0.8, ease: "none" }, 37.6).to("#spin", { opacity: 0, duration: 0.15 }, 38.3)
+  tl.to("#receipt", { yPercent: 0, duration: 1.8, ease: "power1.inOut" }, 38.2)
+  tl.fromTo("#rcSpark", { scale: 0, svgOrigin: "27 27" }, { scale: 1, duration: 0.35, ease: "back.out(2.4)" }, 40.1)
+  tl.to("#rcSpark", { scale: 0, rotation: 90, svgOrigin: "27 27", duration: 0.25, ease: "power2.in" }, 40.55)
+  tl.to("#rcCheck", { strokeDashoffset: 0, duration: 0.4, ease: "power2.out" }, 40.7)
+  tl.to("#paidLbl", { opacity: 1, duration: 0.3 }, 40.8)
+  tl.fromTo("#push", { autoAlpha: 0, y: -120 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "back.out(1.4)" }, 41.4)
+  caption("#c5", 34.4, 43.8)
+
+  // 6 · Cierre (44–50 s)
+  headOut("#h5", 43.8)
+  tl.to(["#payCard", "#slot", "#tray", "#push"], { autoAlpha: 0, duration: 0.45, ease: "power2.in" }, 43.8)
+  tl.set("#endlogo", { autoAlpha: 1 }, 44.3)
+  tl.from("#lStem", { scaleY: 0, transformOrigin: "50% 100%", duration: 0.4, ease: "power2.out" }, 44.4)
+  tl.from("#lBowl", { scaleX: 0, opacity: 0, transformOrigin: "0% 50%", duration: 0.5, ease: "power2.inOut" }, 44.7)
+  tl.from("#lSpark", { scale: 0, rotation: -90, transformOrigin: "50% 50%", duration: 0.4, ease: "back.out(2.2)" }, 45.4)
+  tl.fromTo("#wordmark", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.6 }, 45.7)
+  tl.fromTo("#tagline", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.6 }, 46.2)
+  tl.fromTo("#cta", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "back.out(1.6)" }, 46.9)
+  tl.to("#disclaimer", { autoAlpha: 1, duration: 0.5 }, 47.2)
+  tl.set({}, {}, DURATION)
+
+  // API para el renderizador (scripts/render-video.mjs).
+  window.__duration = DURATION
+  window.__seek = (t) => { tl.seek(t, false) } // sin valor de retorno: Playwright no debe serializar la línea de tiempo
+  window.__ready = false
+  const FACES = ['800 92px "Bricolage Grotesque"', '600 84px "Bricolage Grotesque"', '400 20px Geist', '500 34px Geist', '600 30px Geist',
+    '700 26px Geist', '400 20px "Geist Mono"', '500 22px "Geist Mono"', '600 40px "Geist Mono"']
+  Promise.all(FACES.map((f) => document.fonts.load(f))).then(() => document.fonts.ready).then(() => {
+    tl.seek(0, false)
+    window.__ready = true
+    if (location.search.includes("play")) tl.play(0)
+  })
+</script>
+</body>
+</html>

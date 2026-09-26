@@ -10,6 +10,7 @@ import { useState, useEffect, useCallback } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { useSearchParams, useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
+import { PaymentSuccess } from "@/components/dashboard/payment-success"
 
 interface ServiceItem {
   dbId: string | null
@@ -121,6 +122,9 @@ export default function MisServiciosPage() {
 
   useEffect(() => { loadServices() }, [loadServices])
 
+  const [paymentSuccess, setPaymentSuccess] = useState<string | null>(null)
+  const closePaymentSuccess = useCallback(() => setPaymentSuccess(null), [])
+
   // Maneja retorno desde Stripe (success / cancelled)
   useEffect(() => {
     const payment = searchParams.get("payment")
@@ -131,7 +135,26 @@ export default function MisServiciosPage() {
       const desc = service && provider
         ? `Pago de ${service} — ${provider} procesado exitosamente.`
         : `Pago de ${service || "servicio"} procesado exitosamente.`
-      toast({ title: "✅ Pago completado", description: desc, duration: 6000 })
+      const sessionId = searchParams.get("session_id")
+      const showResult = (paymentStatus?: string) => {
+        if (paymentStatus === "unpaid") {
+          toast({
+            title: "Ficha OXXO generada",
+            description: "Págala en cualquier OXXO en los próximos 3 días. Te avisaremos cuando se confirme.",
+            duration: 8000,
+          })
+        } else {
+          setPaymentSuccess(desc)
+        }
+      }
+      if (sessionId) {
+        fetch(`/api/stripe/session-status?session_id=${encodeURIComponent(sessionId)}`)
+          .then((r) => (r.ok ? r.json() : null))
+          .then((data) => showResult(data?.paymentStatus))
+          .catch(() => showResult())
+      } else {
+        showResult()
+      }
       loadServices() // Recargar para reflejar estado actualizado
       // Limpiar query params sin recargar la página
       router.replace("/dashboard/servicios", { scroll: false })
@@ -265,6 +288,7 @@ export default function MisServiciosPage() {
 
   return (
     <div className="space-y-6 pb-24 md:pb-6">
+      <PaymentSuccess open={paymentSuccess !== null} description={paymentSuccess ?? ""} onClose={closePaymentSuccess} />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground">Mis Servicios</h1>
@@ -314,7 +338,7 @@ export default function MisServiciosPage() {
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <service.icon className="w-6 h-6 text-primary" />
                 </div>
-                <span className="text-lg font-bold text-accent group-hover:scale-110 transition-transform origin-right">${service.amount.toLocaleString()} MXN</span>
+                <span className="text-lg font-bold text-brand-spark group-hover:scale-110 transition-transform origin-right">${service.amount.toLocaleString()} MXN</span>
               </div>
               <CardTitle className="text-base sm:text-lg mt-3 text-foreground">{service.name}</CardTitle>
               <CardDescription className="text-xs sm:text-sm">{service.company}</CardDescription>

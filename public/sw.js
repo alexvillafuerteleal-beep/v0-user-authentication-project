@@ -2,8 +2,8 @@
 // PagoIA Service Worker - Offline support + Push Notifications
 // ============================================================
 
-const CACHE_NAME = "pagoia-v1"
-const STATIC_CACHE_NAME = "pagoia-static-v1"
+const CACHE_NAME = "pagoia-v2"
+const STATIC_CACHE_NAME = "pagoia-static-v2"
 
 // Recursos a cachear para soporte offline
 const STATIC_ASSETS = [
@@ -13,6 +13,7 @@ const STATIC_ASSETS = [
   "/manifest.json",
   "/icon-dark-32x32.png",
   "/icon-light-32x32.png",
+  "/icon-192.png",
 ]
 
 // ─── Instalación: pre-cachear assets estáticos ───────────────
@@ -107,7 +108,7 @@ self.addEventListener("push", (event) => {
     title: "PagoIA",
     body: "Tienes una nueva notificación.",
     url: "/dashboard/notificaciones",
-    icon: "/icon-dark-32x32.png",
+    icon: "/icon-192.png",
     badge: "/icon-dark-32x32.png",
     data: {},
   }

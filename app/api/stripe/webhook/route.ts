@@ -2,6 +2,7 @@ import Stripe from "stripe"
 import { NextRequest, NextResponse } from "next/server"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { createAlertAndPush } from "@/lib/notifications/push"
+import { saveCardFromSetupSession } from "@/lib/payments/autopay-stripe"
 
 function getWebhookRuntime() {
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY
@@ -60,7 +61,15 @@ export async function POST(req: NextRequest) {
   try {
     // Pagos por tarjeta completados
     if (event.type === "checkout.session.completed") {
-      await handleCheckoutSessionCompleted(event)
+      await handleCheckoutSessionCompleted(event, runtime.stripe)
+    }
+
+    // OXXO: la ficha se paga después; Stripe avisa si se pagó o si venció.
+    if (event.type === "checkout.session.async_payment_succeeded") {
+      await handleAsyncPayment(event, true)
+    }
+    if (event.type === "checkout.session.async_payment_failed") {
+      await handleAsyncPayment(event, false)
     }
 
     // Chargebacks/Disputas
@@ -79,8 +88,14 @@ export async function POST(req: NextRequest) {
 /**
  * Maneja finalización de sesión de checkout (pagos por tarjeta)
  */
-async function handleCheckoutSessionCompleted(event: Stripe.Event) {
+async function handleCheckoutSessionCompleted(event: Stripe.Event, stripe: Stripe) {
   const session = event.data.object as Stripe.Checkout.Session
+
+  // Tarjeta guardada para pagos automáticos: no hay cobro que registrar.
+  if (session.mode === "setup") {
+    await saveCardFromSetupSession(stripe, createAdminClient(), session)
+    return
+  }
 
   try {
     const supabase = createAdminClient()
@@ -94,6 +109,30 @@ async function handleCheckoutSessionCompleted(event: Stripe.Event) {
 
     if (!userId) {
       console.error("User ID not found in session metadata")
+      return
+    }
+
+    // Con OXXO la sesión se completa al generar la ficha, pero el pago llega después.
+    // receipt_number guarda el id de la sesión para cerrar la transacción en handleAsyncPayment.
+    if (session.payment_status === "unpaid") {
+      const { error: pendingError } = await supabase.from("transactions").insert({
+        user_id: userId,
+        service_type: serviceType,
+        amount: amount,
+        status: "pending",
+        provider: provider,
+        receipt_number: session.id,
+        transaction_date: new Date().toISOString(),
+      })
+      if (pendingError) console.error("Pending OXXO transaction insert error:", pendingError)
+      await createAlertAndPush({
+        userId,
+        title: `Ficha OXXO lista: ${serviceName}`,
+        message: `Paga $${amount.toFixed(2)} MXN en cualquier OXXO en los próximos 3 días. Te avisaremos cuando se confirme el pago.`,
+        alertType: "warning",
+        url: "/dashboard/historial",
+        tag: `oxxo-voucher-${session.id}`,
+      })
       return
     }
 
@@ -138,6 +177,41 @@ async function handleCheckoutSessionCompleted(event: Stripe.Event) {
     const errorMessage = error instanceof Error ? error.message : String(error)
     console.error("Error processing checkout completion:", errorMessage)
   }
+}
+
+/**
+ * Resultado de un pago asíncrono (ficha OXXO pagada o vencida).
+ */
+async function handleAsyncPayment(event: Stripe.Event, succeeded: boolean) {
+  const session = event.data.object as Stripe.Checkout.Session
+  const userId = session.metadata?.userId
+  if (!userId) return
+
+  const supabase = createAdminClient()
+  const serviceId = session.metadata?.serviceId
+  const serviceName = session.metadata?.service ?? "tu servicio"
+  const amount = parseFloat(session.metadata?.amount || "0")
+
+  await supabase
+    .from("transactions")
+    .update({ status: succeeded ? "completed" : "failed" })
+    .eq("receipt_number", session.id)
+    .eq("user_id", userId)
+
+  if (succeeded && serviceId && !serviceId.includes("-default")) {
+    await supabase.from("user_services").update({ status: "paid" }).eq("id", serviceId).eq("user_id", userId)
+  }
+
+  await createAlertAndPush({
+    userId,
+    title: succeeded ? `✅ Pago de ${serviceName} confirmado` : `La ficha OXXO de ${serviceName} venció`,
+    message: succeeded
+      ? `OXXO confirmó tu pago de $${amount.toFixed(2)} MXN. Descarga tu comprobante desde Historial.`
+      : `No se registró el pago de $${amount.toFixed(2)} MXN. Puedes generar una ficha nueva desde Mis Pagos.`,
+    alertType: succeeded ? "success" : "error",
+    url: succeeded ? "/dashboard/historial" : "/dashboard/servicios",
+    tag: `oxxo-${succeeded ? "paid" : "expired"}-${session.id}`,
+  })
 }
 
 /**

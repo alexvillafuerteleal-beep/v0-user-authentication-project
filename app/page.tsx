@@ -3,6 +3,8 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, BarChart3, Lock, TrendingUp, CheckCircle, Sparkles, Cpu } from "lucide-react"
 import { HeroSection } from "@/components/hero/HeroSection"
+import { Logo } from "@/components/brand/logo"
+import { ExplainerVideo } from "@/components/landing/explainer-video"
 
 const providers = [
   {
@@ -41,32 +43,13 @@ const providers = [
 
 export default function HomePage() {
   return (
-    <div className="landing-3d min-h-screen">
+    <div className="landing-3d dark min-h-screen text-foreground">
       <div className="landing-atmosphere" aria-hidden="true" />
       {/* Navigation */}
       <nav className="landing-nav sticky top-0 z-50 flex items-center justify-between px-6 py-4 md:px-8">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-all duration-300">
-            <svg viewBox="0 0 64 64" className="w-10 h-10" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <radialGradient id="sphereGradientNav" cx="35%" cy="35%">
-                  <stop offset="0%" stopColor="#00D9FF" />
-                  <stop offset="70%" stopColor="#00A8FF" />
-                  <stop offset="100%" stopColor="#0066FF" />
-                </radialGradient>
-                <filter id="neonGlowNav" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              <circle cx="32" cy="32" r="28" fill="url(#sphereGradientNav)" opacity="0.12" />
-              <circle cx="32" cy="32" r="26" fill="none" stroke="url(#sphereGradientNav)" strokeWidth="1" opacity="0.25" />
-              <text x="32" y="38" fontSize="18" fontWeight="bold" textAnchor="middle" fill="#00D9FF" opacity="0.9" filter="url(#neonGlowNav)" fontFamily="system-ui">Pg</text>
-            </svg>
-            <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">PagoIA</span>
+            <Logo animated markClassName="h-10 w-10" />
           </Link>
           <div className="hidden lg:flex items-center gap-3">
             <Link href="#medios" className="menu-pill text-foreground">
@@ -79,7 +62,7 @@ export default function HomePage() {
               Servicios
             </Link>
             <Link href="#panel" className="menu-pill text-muted-foreground">
-              Vista 3D
+              Tu historial
             </Link>
           </div>
         </div>
@@ -95,6 +78,20 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <HeroSection />
+
+      {/* Video explicativo */}
+      <section id="video" className="px-6 md:px-8 py-20 border-t border-cyan-500/20">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-xs uppercase tracking-[0.4em] text-cyan-300">Mira cómo funciona</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-bold text-foreground">PagoIA en 50 segundos</h2>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+              Juntas tus recibos, los capturas con una foto, sabes cuánto viene y pagas con tarjeta u OXXO.
+            </p>
+          </div>
+          <ExplainerVideo />
+        </div>
+      </section>
 
       {/* Características Section */}
       <section id="caracteristicas" className="px-6 md:px-8 py-20 border-t border-cyan-500/20">
@@ -163,8 +160,8 @@ export default function HomePage() {
             <div className="screenshot-grid" />
             <div className="relative h-[420px] w-full overflow-hidden rounded-2xl border border-cyan-300/25">
               <Image
-                src="/PAGO_IA.png"
-                alt="Captura de pantalla real del panel PagoIA"
+                src="/screens/historial.webp"
+                alt="Historial de pagos de PagoIA con filtros, totales y comprobantes"
                 fill
                 className="object-cover"
                 priority
@@ -190,15 +187,15 @@ export default function HomePage() {
           </div>
 
           <div className="space-y-4">
-            <p className="text-xs uppercase tracking-[0.4em] text-cyan-300">Captura operativa</p>
-            <h3 className="text-3xl font-bold text-foreground">Visualizacion del sistema en vivo</h3>
+            <p className="text-xs uppercase tracking-[0.4em] text-cyan-300">Tu historial</p>
+            <h3 className="text-3xl font-bold text-foreground">Cada pago, con su comprobante</h3>
             <p className="text-muted-foreground">
-              La experiencia integra pagos, estados y notificaciones en una sola vista. Los logos de los proveedores se muestran de forma directa para que el usuario identifique su servicio sin friccion.
+              Consulta lo que pagaste, filtra por servicio o fecha y descarga tus comprobantes en PDF o todo tu historial en CSV.
             </p>
             <div className="space-y-3 text-sm text-slate-200">
-              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Vista optimizada para escritorio y celular</div>
-              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Animaciones fluidas sin afectar rendimiento</div>
-              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Jerarquia visual clara para conversion</div>
+              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Funciona en computadora y celular</div>
+              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Un comprobante PDF por cada pago</div>
+              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Exporta a CSV para llevar tu control de gastos</div>
             </div>
           </div>
         </div>
@@ -223,7 +220,7 @@ export default function HomePage() {
                 className={`provider-card ${provider.tone} p-4 rounded-xl border border-white/10 bg-gradient-to-br from-slate-900/70 to-slate-900/30 hover:border-cyan-500/40 transition-all group cursor-pointer`}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className="provider-logo-chip">Proveedor Oficial</div>
+                  <div className="provider-logo-chip">Compatible</div>
                   <div className="provider-tone-chip">{provider.tag}</div>
                 </div>
                 <div className="provider-media relative mb-4 h-36 w-full overflow-hidden rounded-lg border border-cyan-500/20 bg-slate-950/60">
@@ -261,7 +258,7 @@ export default function HomePage() {
             ¿Listo para optimizar tus pagos?
           </h2>
           <p className="text-xl text-muted-foreground">
-            Únete a miles de usuarios que ya confían en PagoIA para gestionar sus servicios
+            Crea tu cuenta y ten todos tus recibos en un solo lugar.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-lg px-8 font-semibold text-base h-12">
@@ -282,24 +279,13 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <svg viewBox="0 0 64 64" className="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <radialGradient id="sphereGradientFooter" cx="35%" cy="35%">
-                      <stop offset="0%" stopColor="#00D9FF" />
-                      <stop offset="100%" stopColor="#0066FF" />
-                    </radialGradient>
-                  </defs>
-                  <circle cx="32" cy="32" r="28" fill="url(#sphereGradientFooter)" opacity="0.15" />
-                  <text x="32" y="38" fontSize="14" fontWeight="bold" textAnchor="middle" fill="#00D9FF" fontFamily="system-ui">Pg</text>
-                </svg>
-                <span className="font-bold text-cyan-400">PagoIA</span>
-              </div>
+              <Logo className="mb-4" markClassName="h-8 w-8" wordmarkClassName="text-lg" />
               <p className="text-sm text-muted-foreground">Gestión inteligente de pagos con IA</p>
             </div>
           </div>
           <div className="border-t border-cyan-500/10 pt-8 text-center text-sm text-muted-foreground">
             <p>&copy; 2026 PagoIA. Todos los derechos reservados.</p>
+            <p className="mt-2 text-xs">PagoIA no está afiliado a CFE, CONAGUA, PEMEX ni TELMEX. Sus marcas pertenecen a sus respectivos titulares.</p>
           </div>
         </div>
       </footer>

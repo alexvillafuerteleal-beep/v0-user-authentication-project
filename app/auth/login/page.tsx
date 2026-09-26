@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Spinner } from "@/components/ui/spinner"
 import { Mail, Lock, AlertCircle } from "lucide-react"
+import { Logo } from "@/components/brand/logo"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -87,52 +88,13 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       {/* Background decorative elements */}
-      <div className="absolute top-20 right-1/4 w-64 h-64 bg-accent/10 rounded-full blur-3xl" />
+      <div className="absolute top-20 right-1/4 w-64 h-64 bg-brand-spark/10 rounded-full blur-3xl" />
       <div className="absolute bottom-20 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
 
       <Card className="w-full max-w-md bg-card border-border relative z-10">
         <CardHeader className="text-center">
           <Link href="/" className="flex items-center justify-center gap-2 mb-4 hover:opacity-80 transition-all duration-300">
-            <svg viewBox="0 0 64 64" className="w-12 h-12" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <radialGradient id="sphereGradient3" cx="35%" cy="35%">
-                  <stop offset="0%" stopColor="#00D9FF" />
-                  <stop offset="70%" stopColor="#00A8FF" />
-                  <stop offset="100%" stopColor="#0066FF" />
-                </radialGradient>
-                <filter id="neonGlow3" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-                <filter id="strongGlow3" x="-100%" y="-100%" width="300%" height="300%">
-                  <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              <circle cx="32" cy="32" r="28" fill="url(#sphereGradient3)" opacity="0.12" />
-              <circle cx="32" cy="32" r="26" fill="none" stroke="url(#sphereGradient3)" strokeWidth="1" opacity="0.25" />
-              <circle cx="32" cy="32" r="24" fill="none" stroke="#00FF88" strokeWidth="0.8" opacity="0.15" strokeDasharray="3,2" />
-              <text x="32" y="38" fontSize="18" fontWeight="bold" textAnchor="middle" fill="#00D9FF" opacity="0.9" filter="url(#strongGlow3)" fontFamily="system-ui, -apple-system, sans-serif">Pg</text>
-              <circle cx="32" cy="18" r="1.8" fill="#00FF88" filter="url(#neonGlow3)" />
-              <circle cx="42" cy="22" r="1.6" fill="#00D9FF" filter="url(#neonGlow3)" />
-              <circle cx="48" cy="30" r="1.5" fill="#00FF88" filter="url(#neonGlow3)" />
-              <circle cx="16" cy="30" r="1.5" fill="#00FF88" filter="url(#neonGlow3)" />
-              <circle cx="22" cy="46" r="1.6" fill="#00D9FF" filter="url(#neonGlow3)" />
-              <circle cx="42" cy="46" r="1.6" fill="#00D9FF" filter="url(#neonGlow3)" />
-              <line x1="32" y1="18" x2="42" y2="22" stroke="#00D9FF" strokeWidth="0.8" opacity="0.4" />
-              <line x1="42" y1="22" x2="48" y2="30" stroke="#00FF88" strokeWidth="0.8" opacity="0.4" />
-              <line x1="48" y1="30" x2="42" y2="46" stroke="#00D9FF" strokeWidth="0.8" opacity="0.4" />
-              <line x1="42" y1="46" x2="22" y2="46" stroke="#00FF88" strokeWidth="0.8" opacity="0.4" />
-              <line x1="22" y1="46" x2="16" y2="30" stroke="#00D9FF" strokeWidth="0.8" opacity="0.4" />
-              <line x1="16" y1="30" x2="32" y2="18" stroke="#00FF88" strokeWidth="0.8" opacity="0.4" />
-            </svg>
-            <span className="text-xl font-bold text-foreground">PagoIA</span>
+            <Logo markClassName="h-12 w-12" wordmarkClassName="text-2xl" />
           </Link>
           <CardTitle className="text-2xl text-foreground">Iniciar Sesión</CardTitle>
           <CardDescription className="text-muted-foreground">

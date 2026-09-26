@@ -4,37 +4,38 @@
   "description": "Gestión de pagos y servicios con Inteligencia Artificial",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#00D9FF",
+  "background_color": "#0a1929",
+  "theme_color": "#0a1929",
   "orientation": "portrait-primary",
-  "categories": ["finance", "productivity"],
+  "categories": [
+    "finance",
+    "productivity"
+  ],
   "lang": "es",
   "icons": [
     {
-      "src": "/icon-light-32x32.png",
-      "sizes": "32x32",
-      "type": "image/png"
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
-      "src": "/apple-icon.png",
-      "sizes": "180x180",
+      "src": "/icon-192.png",
+      "sizes": "192x192",
       "type": "image/png",
-      "purpose": "apple touch icon"
+      "purpose": "any"
     },
     {
-      "src": "/PAGO_IA.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable any"
-    }
-  ],
-  "screenshots": [
+      "purpose": "any"
+    },
     {
-      "src": "/PAGO_IA.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "form_factor": "narrow",
-      "label": "PagoIA Dashboard"
+      "purpose": "maskable"
     }
   ],
   "shortcuts": [
@@ -43,21 +44,36 @@
       "short_name": "Dashboard",
       "description": "Ver tu panel principal",
       "url": "/dashboard",
-      "icons": [{ "src": "/icon-dark-32x32.png", "sizes": "32x32" }]
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "Historial",
       "short_name": "Historial",
       "description": "Ver historial de pagos",
       "url": "/dashboard/historial",
-      "icons": [{ "src": "/icon-dark-32x32.png", "sizes": "32x32" }]
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "Notificaciones",
       "short_name": "Alertas",
       "description": "Ver notificaciones",
       "url": "/dashboard/notificaciones",
-      "icons": [{ "src": "/icon-dark-32x32.png", "sizes": "32x32" }]
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }

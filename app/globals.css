@@ -3,41 +3,48 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Tokens de PagoIA. :root es el modo claro; .dark conserva el azul marino original.
+ * El turquesa #00D4AA no alcanza contraste AA como texto sobre blanco, por eso en claro
+ * --primary usa #007A63. El magenta (--brand-spark) se reserva para la chispa de la IA.
+ * Las series --chart-1..5 están validadas para daltonismo en ambos modos.
+ */
 :root {
-  /* Dark Navy Theme - Crypto/Dashboard Style */
-  --background: #0a1929;
-  --foreground: #ffffff;
-  --card: #0d2137;
-  --card-foreground: #ffffff;
-  --popover: #0d2137;
-  --popover-foreground: #ffffff;
-  --primary: #00d4aa;
-  --primary-foreground: #0a1929;
-  --secondary: #1a3a5c;
-  --secondary-foreground: #ffffff;
-  --muted: #1a3a5c;
-  --muted-foreground: #8b9bb4;
-  --accent: #e91e8c;
-  --accent-foreground: #ffffff;
-  --destructive: #ef4444;
+  --background: #f3f6f9;
+  --foreground: #0a1929;
+  --card: #ffffff;
+  --card-foreground: #0a1929;
+  --popover: #ffffff;
+  --popover-foreground: #0a1929;
+  --primary: #007a63;
+  --primary-foreground: #ffffff;
+  --secondary: #e6edf4;
+  --secondary-foreground: #0a1929;
+  --muted: #e6edf4;
+  --muted-foreground: #5a6e86;
+  --accent: #e6edf4;
+  --accent-foreground: #0a1929;
+  --destructive: #b91c1c;
   --destructive-foreground: #ffffff;
-  --border: #1e4976;
-  --input: #1a3a5c;
-  --ring: #00d4aa;
-  --chart-1: #5d87ff;
-  --chart-2: #f76f8e;
-  --chart-3: #00d4aa;
-  --chart-4: #ffab40;
-  --chart-5: #e91e8c;
+  --border: #d4dee8;
+  --input: #d4dee8;
+  --ring: #007a63;
+  --brand-teal: #00d4aa;
+  --brand-spark: #c2177a;
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-3: #00a383;
+  --chart-4: #c98500;
+  --chart-5: #e0457b;
   --radius: 0.625rem;
-  --sidebar: #051525;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #00d4aa;
-  --sidebar-primary-foreground: #0a1929;
-  --sidebar-accent: #1a3a5c;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #1e4976;
-  --sidebar-ring: #00d4aa;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0a1929;
+  --sidebar-primary: #007a63;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e6edf4;
+  --sidebar-accent-foreground: #0a1929;
+  --sidebar-border: #d4dee8;
+  --sidebar-ring: #007a63;
 }
 
 .dark {
@@ -53,18 +60,20 @@
   --secondary-foreground: #ffffff;
   --muted: #1a3a5c;
   --muted-foreground: #8b9bb4;
-  --accent: #e91e8c;
+  --accent: #1a3a5c;
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
   --border: #1e4976;
   --input: #1a3a5c;
   --ring: #00d4aa;
-  --chart-1: #5d87ff;
-  --chart-2: #f76f8e;
-  --chart-3: #00d4aa;
-  --chart-4: #ffab40;
-  --chart-5: #e91e8c;
+  --brand-teal: #00d4aa;
+  --brand-spark: #f0479f;
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
   --sidebar: #051525;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #00d4aa;
@@ -76,8 +85,11 @@
 }
 
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-sans: var(--font-geist-sans), 'Geist', system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), 'Geist Mono', ui-monospace, monospace;
+  --font-display: var(--font-bricolage), var(--font-geist-sans), system-ui, sans-serif;
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-spark: var(--brand-spark);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -122,6 +134,11 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
   }
 }
 
@@ -273,27 +290,6 @@
 
 .provider-media {
   background: var(--provider-media-bg);
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --provider-card-bg-start: rgba(240, 249, 255, 0.95);
-    --provider-card-bg-end: rgba(226, 244, 255, 0.74);
-    --provider-card-border: rgba(8, 47, 73, 0.2);
-    --provider-media-bg: rgba(255, 255, 255, 0.9);
-  }
-
-  .provider-logo-chip,
-  .provider-tone-chip {
-    color: #0c4a6e;
-    border-color: rgba(14, 116, 144, 0.24);
-    background: rgba(186, 230, 253, 0.5);
-  }
-
-  .provider-mini-logo {
-    background: rgba(255, 255, 255, 0.86);
-    border-color: rgba(8, 145, 178, 0.34);
-  }
 }
 
 .dark {

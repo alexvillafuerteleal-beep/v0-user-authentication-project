@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 export interface HeroRefs {
   /** Elemento `<section>` raíz del hero. */
   sectionRef: RefObject<HTMLElement | null>
-  /** Párrafo de etiqueta superior ("Pago IA para Mexico"). */
+  /** Párrafo de etiqueta superior ("Pago de servicios en México"). */
   taglineRef: RefObject<HTMLElement | null>
   /** Titular principal `<h1>`. */
   titleRef: RefObject<HTMLElement | null>

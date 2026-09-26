@@ -4,6 +4,13 @@ import { createClient } from "@/lib/supabase/server"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "")
 
+// Métodos habilitados, p. ej. "card,oxxo". OXXO requiere una cuenta de Stripe registrada en México
+// y montos entre $10 y $10,000 MXN.
+const PAYMENT_METHODS = (process.env.STRIPE_PAYMENT_METHODS || "card")
+  .split(",")
+  .map((m) => m.trim())
+  .filter(Boolean) as Stripe.Checkout.SessionCreateParams.PaymentMethodType[]
+
 export async function POST(req: NextRequest) {
   try {
     console.log("[API] POST /api/stripe/create-checkout-session - Starting")
@@ -45,7 +52,8 @@ export async function POST(req: NextRequest) {
 
     // Crear sesión de checkout con Stripe
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
+      payment_method_types: PAYMENT_METHODS,
+      ...(PAYMENT_METHODS.includes("oxxo") ? { payment_method_options: { oxxo: { expires_after_days: 3 } } } : {}),
       line_items: [
         {
           price_data: {
@@ -62,7 +70,7 @@ export async function POST(req: NextRequest) {
         },
       ],
       mode: "payment",
-      success_url: `${resolvedBaseUrl}/dashboard/servicios?payment=success&service=${encodeURIComponent(service)}&provider=${encodeURIComponent(provider || "")}&serviceId=${serviceId}`,
+      success_url: `${resolvedBaseUrl}/dashboard/servicios?payment=success&service=${encodeURIComponent(service)}&provider=${encodeURIComponent(provider || "")}&serviceId=${serviceId}&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${resolvedBaseUrl}/dashboard/servicios?payment=cancelled`,
       metadata: {
         userId: user.id,

@@ -309,11 +309,15 @@ export default function PerfilPage() {
               </label>
               <Input 
                 disabled={!editing}
-                placeholder="Agregar teléfono"
+                placeholder="Celular a 10 dígitos"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData({...formData, phone: e.target.value})}
                 className="bg-secondary border-border text-foreground"
               />
+              <p className="mt-1 text-xs text-muted-foreground">Lo usamos solo para los recordatorios por WhatsApp que actives en Calendario.</p>
             </div>
             <div>
               <label className="text-sm font-medium text-foreground flex items-center gap-2 mb-2">
