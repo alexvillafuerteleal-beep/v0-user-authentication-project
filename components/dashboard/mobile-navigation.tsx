@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { ScanLine, CalendarDays, PiggyBank, 
+import { ScanLine, CalendarDays, PiggyBank, Users, 
   LayoutDashboard, 
   Droplet,
   FileText,
@@ -33,6 +33,7 @@ const sidebarItems = [
       { name: "Recibos", href: "/dashboard/recibos", icon: ScanLine },
       { name: "Calendario", href: "/dashboard/calendario", icon: CalendarDays },
       { name: "Presupuestos", href: "/dashboard/presupuestos", icon: PiggyBank },
+      { name: "Hogar", href: "/dashboard/hogar", icon: Users },
       { name: "Estados de Cuenta", href: "/dashboard/estados", icon: FileText },
       { name: "Historial", href: "/dashboard/historial", icon: History },
       { name: "Comparativo", href: "/dashboard/comparativo", icon: BarChart3 },

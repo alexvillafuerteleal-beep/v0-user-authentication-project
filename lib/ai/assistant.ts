@@ -15,6 +15,7 @@ export const DESTINATIONS = {
   recibos: { url: "/dashboard/recibos", label: "Escanear un recibo" },
   calendario: { url: "/dashboard/calendario", label: "Ver calendario" },
   presupuestos: { url: "/dashboard/presupuestos", label: "Ver presupuestos" },
+  hogar: { url: "/dashboard/hogar", label: "Ir a hogar compartido" },
   historial: { url: "/dashboard/historial", label: "Ver historial" },
   estados: { url: "/dashboard/estados", label: "Ver estados de cuenta" },
   comparativo: { url: "/dashboard/comparativo", label: "Ver comparativo" },
@@ -93,7 +94,7 @@ export const TOOLS: Anthropic.Beta.BetaTool[] = [
   {
     name: "navegar",
     description:
-      "Muestra al usuario un botón para abrir una pantalla de PagoIA. Úsala cuando quiera pagar (servicios), escanear o capturar un recibo (recibos), ver sus vencimientos o programar recordatorios (calendario), poner límites de gasto (presupuestos), ver su historial, sus estados de cuenta, el comparativo, sus notificaciones, su perfil o la configuración.",
+      "Muestra al usuario un botón para abrir una pantalla de PagoIA. Úsala cuando quiera pagar (servicios), escanear o capturar un recibo (recibos), ver sus vencimientos o programar recordatorios (calendario), poner límites de gasto (presupuestos), dividir recibos con quienes vive (hogar), ver su historial, sus estados de cuenta, el comparativo, sus notificaciones, su perfil o la configuración.",
     input_schema: {
       type: "object",
       properties: { destino: { type: "string", enum: destinationKeys } },
