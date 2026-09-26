@@ -417,7 +417,7 @@ export default function HistorialPage() {
         </Button>
 
         <Button 
-          className="flex-1 bg-gradient-to-r from-accent to-accent/80 hover:from-accent/90 hover:to-accent text-white gap-2 h-10"
+          className="flex-1 bg-gradient-to-r from-brand-spark to-brand-spark/80 hover:from-brand-spark/90 hover:to-brand-spark text-white gap-2 h-10"
           onClick={downloadPDF}
         >
           <Download className="w-4 h-4" />
@@ -458,7 +458,7 @@ export default function HistorialPage() {
                   <tr key={t.id} className={`border-b border-border/50 ${idx % 2 === 0 ? 'bg-secondary/20' : ''} hover:bg-secondary/30 transition-colors`}>
                     <td className="py-3 px-4 text-foreground font-semibold">#{t.id.slice(0, 8)}</td>
                     <td className="py-3 px-4 text-foreground">{t.service}</td>
-                    <td className="py-3 px-4 text-right text-accent font-bold">${t.amount.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-right text-brand-spark font-bold">${t.amount.toLocaleString()}</td>
                     <td className="py-3 px-4 text-foreground text-xs">{t.date}</td>
                     <td className="py-3 px-4">
                       <span className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs rounded-full border font-semibold ${statusBadgeClass(t.status)}`}>

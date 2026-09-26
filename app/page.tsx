@@ -3,6 +3,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, BarChart3, Lock, TrendingUp, CheckCircle, Sparkles, Cpu } from "lucide-react"
 import { HeroSection } from "@/components/hero/HeroSection"
+import { Logo } from "@/components/brand/logo"
 
 const providers = [
   {
@@ -41,32 +42,13 @@ const providers = [
 
 export default function HomePage() {
   return (
-    <div className="landing-3d min-h-screen">
+    <div className="landing-3d dark min-h-screen text-foreground">
       <div className="landing-atmosphere" aria-hidden="true" />
       {/* Navigation */}
       <nav className="landing-nav sticky top-0 z-50 flex items-center justify-between px-6 py-4 md:px-8">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-all duration-300">
-            <svg viewBox="0 0 64 64" className="w-10 h-10" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <radialGradient id="sphereGradientNav" cx="35%" cy="35%">
-                  <stop offset="0%" stopColor="#00D9FF" />
-                  <stop offset="70%" stopColor="#00A8FF" />
-                  <stop offset="100%" stopColor="#0066FF" />
-                </radialGradient>
-                <filter id="neonGlowNav" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              <circle cx="32" cy="32" r="28" fill="url(#sphereGradientNav)" opacity="0.12" />
-              <circle cx="32" cy="32" r="26" fill="none" stroke="url(#sphereGradientNav)" strokeWidth="1" opacity="0.25" />
-              <text x="32" y="38" fontSize="18" fontWeight="bold" textAnchor="middle" fill="#00D9FF" opacity="0.9" filter="url(#neonGlowNav)" fontFamily="system-ui">Pg</text>
-            </svg>
-            <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">PagoIA</span>
+            <Logo markClassName="h-10 w-10" />
           </Link>
           <div className="hidden lg:flex items-center gap-3">
             <Link href="#medios" className="menu-pill text-foreground">
@@ -223,7 +205,7 @@ export default function HomePage() {
                 className={`provider-card ${provider.tone} p-4 rounded-xl border border-white/10 bg-gradient-to-br from-slate-900/70 to-slate-900/30 hover:border-cyan-500/40 transition-all group cursor-pointer`}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className="provider-logo-chip">Proveedor Oficial</div>
+                  <div className="provider-logo-chip">Compatible</div>
                   <div className="provider-tone-chip">{provider.tag}</div>
                 </div>
                 <div className="provider-media relative mb-4 h-36 w-full overflow-hidden rounded-lg border border-cyan-500/20 bg-slate-950/60">
@@ -282,24 +264,13 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <svg viewBox="0 0 64 64" className="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <radialGradient id="sphereGradientFooter" cx="35%" cy="35%">
-                      <stop offset="0%" stopColor="#00D9FF" />
-                      <stop offset="100%" stopColor="#0066FF" />
-                    </radialGradient>
-                  </defs>
-                  <circle cx="32" cy="32" r="28" fill="url(#sphereGradientFooter)" opacity="0.15" />
-                  <text x="32" y="38" fontSize="14" fontWeight="bold" textAnchor="middle" fill="#00D9FF" fontFamily="system-ui">Pg</text>
-                </svg>
-                <span className="font-bold text-cyan-400">PagoIA</span>
-              </div>
+              <Logo className="mb-4" markClassName="h-8 w-8" wordmarkClassName="text-lg" />
               <p className="text-sm text-muted-foreground">Gestión inteligente de pagos con IA</p>
             </div>
           </div>
           <div className="border-t border-cyan-500/10 pt-8 text-center text-sm text-muted-foreground">
             <p>&copy; 2026 PagoIA. Todos los derechos reservados.</p>
+            <p className="mt-2 text-xs">PagoIA no está afiliado a CFE, CONAGUA, PEMEX ni TELMEX. Sus marcas pertenecen a sus respectivos titulares.</p>
           </div>
         </div>
       </footer>

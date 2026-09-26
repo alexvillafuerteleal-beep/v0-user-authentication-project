@@ -48,7 +48,7 @@ function getSupabaseClient(supabaseClient?: DatabaseClient) {
 
 function formatNotificationPayload(payload: PushPayload) {
   return JSON.stringify({
-    icon: "/icon-dark-32x32.png",
+    icon: "/icon-192.png",
     badge: "/icon-dark-32x32.png",
     url: "/dashboard/notificaciones",
     requireInteraction: false,

@@ -314,7 +314,7 @@ export default function MisServiciosPage() {
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <service.icon className="w-6 h-6 text-primary" />
                 </div>
-                <span className="text-lg font-bold text-accent group-hover:scale-110 transition-transform origin-right">${service.amount.toLocaleString()} MXN</span>
+                <span className="text-lg font-bold text-brand-spark group-hover:scale-110 transition-transform origin-right">${service.amount.toLocaleString()} MXN</span>
               </div>
               <CardTitle className="text-base sm:text-lg mt-3 text-foreground">{service.name}</CardTitle>
               <CardDescription className="text-xs sm:text-sm">{service.company}</CardDescription>

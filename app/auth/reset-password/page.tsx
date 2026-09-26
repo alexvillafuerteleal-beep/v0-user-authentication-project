@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Lock, AlertCircle, CheckCircle } from "lucide-react"
+import { Logo } from "@/components/brand/logo"
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState("")
@@ -52,32 +53,13 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="absolute top-20 right-1/4 w-64 h-64 bg-accent/10 rounded-full blur-3xl" />
+      <div className="absolute top-20 right-1/4 w-64 h-64 bg-brand-spark/10 rounded-full blur-3xl" />
       <div className="absolute bottom-20 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
 
       <Card className="w-full max-w-md bg-card border-border relative z-10">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <svg viewBox="0 0 64 64" className="w-12 h-12" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <radialGradient id="sgRP" cx="35%" cy="35%">
-                  <stop offset="0%" stopColor="#00D9FF" />
-                  <stop offset="70%" stopColor="#00A8FF" />
-                  <stop offset="100%" stopColor="#0066FF" />
-                </radialGradient>
-                <filter id="glowRP" x="-100%" y="-100%" width="300%" height="300%">
-                  <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              <circle cx="32" cy="32" r="28" fill="url(#sgRP)" opacity="0.12" />
-              <circle cx="32" cy="32" r="26" fill="none" stroke="url(#sgRP)" strokeWidth="1" opacity="0.25" />
-              <text x="32" y="38" fontSize="18" fontWeight="bold" textAnchor="middle" fill="#00D9FF" opacity="0.9" filter="url(#glowRP)" fontFamily="system-ui, -apple-system, sans-serif">Pg</text>
-            </svg>
-            <span className="text-xl font-bold text-foreground">PagoIA</span>
+            <Logo markClassName="h-12 w-12" wordmarkClassName="text-2xl" />
           </div>
           <CardTitle className="text-2xl text-foreground">Nueva Contraseña</CardTitle>
           <CardDescription className="text-muted-foreground">
