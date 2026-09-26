@@ -135,7 +135,26 @@ export default function MisServiciosPage() {
       const desc = service && provider
         ? `Pago de ${service} — ${provider} procesado exitosamente.`
         : `Pago de ${service || "servicio"} procesado exitosamente.`
-      setPaymentSuccess(desc)
+      const sessionId = searchParams.get("session_id")
+      const showResult = (paymentStatus?: string) => {
+        if (paymentStatus === "unpaid") {
+          toast({
+            title: "Ficha OXXO generada",
+            description: "Págala en cualquier OXXO en los próximos 3 días. Te avisaremos cuando se confirme.",
+            duration: 8000,
+          })
+        } else {
+          setPaymentSuccess(desc)
+        }
+      }
+      if (sessionId) {
+        fetch(`/api/stripe/session-status?session_id=${encodeURIComponent(sessionId)}`)
+          .then((r) => (r.ok ? r.json() : null))
+          .then((data) => showResult(data?.paymentStatus))
+          .catch(() => showResult())
+      } else {
+        showResult()
+      }
       loadServices() // Recargar para reflejar estado actualizado
       // Limpiar query params sin recargar la página
       router.replace("/dashboard/servicios", { scroll: false })

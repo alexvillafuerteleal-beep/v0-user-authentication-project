@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { 
+import { ScanLine, 
   LayoutDashboard, 
   Droplet,
   FileText,
@@ -30,6 +30,7 @@ const sidebarItems = [
     title: "GESTIÓN",
     items: [
       { name: "Mis Pagos", href: "/dashboard/servicios", icon: Droplet },
+      { name: "Recibos", href: "/dashboard/recibos", icon: ScanLine },
       { name: "Estados de Cuenta", href: "/dashboard/estados", icon: FileText },
       { name: "Historial", href: "/dashboard/historial", icon: History },
       { name: "Comparativo", href: "/dashboard/comparativo", icon: BarChart3 },

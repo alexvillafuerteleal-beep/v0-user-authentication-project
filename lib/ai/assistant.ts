@@ -12,6 +12,7 @@ export const DAILY_TOKEN_LIMIT = 150_000
 export const DESTINATIONS = {
   dashboard: { url: "/dashboard", label: "Ir al panel" },
   servicios: { url: "/dashboard/servicios", label: "Ver mis servicios" },
+  recibos: { url: "/dashboard/recibos", label: "Escanear un recibo" },
   historial: { url: "/dashboard/historial", label: "Ver historial" },
   estados: { url: "/dashboard/estados", label: "Ver estados de cuenta" },
   comparativo: { url: "/dashboard/comparativo", label: "Ver comparativo" },
@@ -90,7 +91,7 @@ export const TOOLS: Anthropic.Beta.BetaTool[] = [
   {
     name: "navegar",
     description:
-      "Muestra al usuario un botón para abrir una pantalla de PagoIA. Úsala cuando quiera pagar (servicios), ver su historial, sus estados de cuenta, el comparativo, sus notificaciones, su perfil o la configuración.",
+      "Muestra al usuario un botón para abrir una pantalla de PagoIA. Úsala cuando quiera pagar (servicios), escanear o capturar un recibo (recibos), ver su historial, sus estados de cuenta, el comparativo, sus notificaciones, su perfil o la configuración.",
     input_schema: {
       type: "object",
       properties: { destino: { type: "string", enum: destinationKeys } },
