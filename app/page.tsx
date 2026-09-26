@@ -48,7 +48,7 @@ export default function HomePage() {
       <nav className="landing-nav sticky top-0 z-50 flex items-center justify-between px-6 py-4 md:px-8">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-all duration-300">
-            <Logo markClassName="h-10 w-10" />
+            <Logo animated markClassName="h-10 w-10" />
           </Link>
           <div className="hidden lg:flex items-center gap-3">
             <Link href="#medios" className="menu-pill text-foreground">
@@ -61,7 +61,7 @@ export default function HomePage() {
               Servicios
             </Link>
             <Link href="#panel" className="menu-pill text-muted-foreground">
-              Vista 3D
+              Tu historial
             </Link>
           </div>
         </div>
@@ -145,8 +145,8 @@ export default function HomePage() {
             <div className="screenshot-grid" />
             <div className="relative h-[420px] w-full overflow-hidden rounded-2xl border border-cyan-300/25">
               <Image
-                src="/PAGO_IA.png"
-                alt="Captura de pantalla real del panel PagoIA"
+                src="/screens/historial.webp"
+                alt="Historial de pagos de PagoIA con filtros, totales y comprobantes"
                 fill
                 className="object-cover"
                 priority
@@ -172,15 +172,15 @@ export default function HomePage() {
           </div>
 
           <div className="space-y-4">
-            <p className="text-xs uppercase tracking-[0.4em] text-cyan-300">Captura operativa</p>
-            <h3 className="text-3xl font-bold text-foreground">Visualizacion del sistema en vivo</h3>
+            <p className="text-xs uppercase tracking-[0.4em] text-cyan-300">Tu historial</p>
+            <h3 className="text-3xl font-bold text-foreground">Cada pago, con su comprobante</h3>
             <p className="text-muted-foreground">
-              La experiencia integra pagos, estados y notificaciones en una sola vista. Los logos de los proveedores se muestran de forma directa para que el usuario identifique su servicio sin friccion.
+              Consulta lo que pagaste, filtra por servicio o fecha y descarga tus comprobantes en PDF o todo tu historial en CSV.
             </p>
             <div className="space-y-3 text-sm text-slate-200">
-              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Vista optimizada para escritorio y celular</div>
-              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Animaciones fluidas sin afectar rendimiento</div>
-              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Jerarquia visual clara para conversion</div>
+              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Funciona en computadora y celular</div>
+              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Un comprobante PDF por cada pago</div>
+              <div className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-cyan-400" />Exporta a CSV para llevar tu control de gastos</div>
             </div>
           </div>
         </div>
@@ -243,7 +243,7 @@ export default function HomePage() {
             ¿Listo para optimizar tus pagos?
           </h2>
           <p className="text-xl text-muted-foreground">
-            Únete a miles de usuarios que ya confían en PagoIA para gestionar sus servicios
+            Crea tu cuenta y ten todos tus recibos en un solo lugar.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-lg px-8 font-semibold text-base h-12">

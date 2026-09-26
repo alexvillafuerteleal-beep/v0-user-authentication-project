@@ -10,6 +10,7 @@ import { useState, useEffect, useCallback } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { useSearchParams, useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
+import { PaymentSuccess } from "@/components/dashboard/payment-success"
 
 interface ServiceItem {
   dbId: string | null
@@ -121,6 +122,9 @@ export default function MisServiciosPage() {
 
   useEffect(() => { loadServices() }, [loadServices])
 
+  const [paymentSuccess, setPaymentSuccess] = useState<string | null>(null)
+  const closePaymentSuccess = useCallback(() => setPaymentSuccess(null), [])
+
   // Maneja retorno desde Stripe (success / cancelled)
   useEffect(() => {
     const payment = searchParams.get("payment")
@@ -131,7 +135,7 @@ export default function MisServiciosPage() {
       const desc = service && provider
         ? `Pago de ${service} — ${provider} procesado exitosamente.`
         : `Pago de ${service || "servicio"} procesado exitosamente.`
-      toast({ title: "✅ Pago completado", description: desc, duration: 6000 })
+      setPaymentSuccess(desc)
       loadServices() // Recargar para reflejar estado actualizado
       // Limpiar query params sin recargar la página
       router.replace("/dashboard/servicios", { scroll: false })
@@ -265,6 +269,7 @@ export default function MisServiciosPage() {
 
   return (
     <div className="space-y-6 pb-24 md:pb-6">
+      <PaymentSuccess open={paymentSuccess !== null} description={paymentSuccess ?? ""} onClose={closePaymentSuccess} />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground">Mis Servicios</h1>

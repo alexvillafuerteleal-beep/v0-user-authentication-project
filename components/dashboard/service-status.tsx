@@ -17,9 +17,9 @@ interface ServicePayment {
 }
 
 const statusColors: Record<string, string> = {
-  completed: "bg-green-500/10 text-green-700 border-green-200",
-  pending: "bg-amber-500/10 text-amber-700 border-amber-200",
-  failed: "bg-red-500/10 text-red-700 border-red-200",
+  completed: "bg-green-500/10 text-green-700 dark:text-green-300 border-green-200",
+  pending: "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-200",
+  failed: "bg-red-500/10 text-red-700 dark:text-red-300 border-red-200",
 }
 
 export function ServiceStatus() {

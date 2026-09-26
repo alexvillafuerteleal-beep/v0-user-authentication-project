@@ -14,12 +14,19 @@ import { useSearchParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { createClient } from "@/lib/supabase/client"
+import { CountUp } from "@/components/motion/count-up"
 
 interface DashboardStats {
   totalPaid: number
   recentCount: number
   thisMonthTotal: number
   averageMonthly: number
+}
+
+/** "Septiembre de 2026": solo la primera letra en mayúscula. */
+function currentMonthLabel() {
+  const label = new Date().toLocaleDateString("es-MX", { month: "long", year: "numeric" })
+  return label.charAt(0).toUpperCase() + label.slice(1)
 }
 
 export default function DashboardPage() {
@@ -159,7 +166,7 @@ export default function DashboardPage() {
               <div className="min-w-0">
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Total Pagado</p>
                 <p className="text-xl sm:text-2xl font-bold text-cyan-600 mt-1 truncate">
-                  {loading ? "..." : `$${stats.totalPaid.toLocaleString("es-MX", { minimumFractionDigits: 0 })}`}
+                  {loading ? "..." : <CountUp value={stats.totalPaid} prefix="$" />}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">MXN acumulado</p>
               </div>
@@ -168,7 +175,7 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="mt-3">
-              <span className="text-xs px-2 py-0.5 bg-cyan-500/20 text-cyan-700 rounded-full font-semibold">
+              <span className="text-xs px-2 py-0.5 bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 rounded-full font-semibold">
                 {stats.recentCount} transacciones
               </span>
             </div>
@@ -181,16 +188,16 @@ export default function DashboardPage() {
               <div className="min-w-0">
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Este Mes</p>
                 <p className="text-xl sm:text-2xl font-bold text-green-600 mt-1 truncate">
-                  {loading ? "..." : `$${stats.thisMonthTotal.toLocaleString("es-MX", { minimumFractionDigits: 0 })}`}
+                  {loading ? "..." : <CountUp value={stats.thisMonthTotal} prefix="$" />}
                 </p>
-                <p className="text-xs text-muted-foreground mt-1">Abril 2026</p>
+                <p className="text-xs text-muted-foreground mt-1">{currentMonthLabel()}</p>
               </div>
               <div className="w-9 h-9 rounded-lg bg-green-500/20 flex items-center justify-center shrink-0">
                 <Calendar className="w-4 h-4 text-green-600" />
               </div>
             </div>
             <div className="mt-3">
-              <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-700 rounded-full font-semibold">
+              <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-700 dark:text-green-300 rounded-full font-semibold">
                 Datos reales
               </span>
             </div>
@@ -203,7 +210,7 @@ export default function DashboardPage() {
               <div className="min-w-0">
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Promedio Mensual</p>
                 <p className="text-xl sm:text-2xl font-bold text-blue-600 mt-1 truncate">
-                  {loading ? "..." : `$${stats.averageMonthly.toLocaleString("es-MX", { minimumFractionDigits: 0 })}`}
+                  {loading ? "..." : <CountUp value={stats.averageMonthly} prefix="$" />}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">MXN por mes</p>
               </div>
@@ -212,7 +219,7 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="mt-3">
-              <span className="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-700 rounded-full font-semibold">
+              <span className="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-700 dark:text-blue-300 rounded-full font-semibold">
                 Calculado
               </span>
             </div>
@@ -232,7 +239,7 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="mt-3">
-              <button onClick={() => router.push("/dashboard/servicios")} className="text-xs px-2 py-0.5 bg-amber-500/20 text-amber-700 rounded-full font-semibold hover:bg-amber-500/30 transition-colors">
+              <button onClick={() => router.push("/dashboard/servicios")} className="text-xs px-2 py-0.5 bg-amber-500/20 text-amber-700 dark:text-amber-300 rounded-full font-semibold hover:bg-amber-500/30 transition-colors">
                 Ver servicios →
               </button>
             </div>
@@ -286,7 +293,7 @@ export default function DashboardPage() {
                 <div className="flex-1">
                   <h3 className="text-sm font-semibold text-foreground">Estado del Sistema</h3>
                   <div className="flex items-center gap-2 mt-1.5">
-                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-xs bg-green-500/20 text-green-700 rounded-full border border-green-500/30 font-semibold">
+                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-xs bg-green-500/20 text-green-700 dark:text-green-300 rounded-full border border-green-500/30 font-semibold">
                       <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
                       Conectado
                     </span>

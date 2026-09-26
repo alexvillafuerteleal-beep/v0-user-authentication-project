@@ -3,9 +3,10 @@
 import { useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, ShieldCheck, Cpu, CreditCard, BellRing } from "lucide-react"
+import { ArrowRight, CreditCard } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useHeroAnimation } from "@/hooks/use-hero-animation"
+import { ReceiptLoop } from "@/components/landing/receipt-loop"
 
 /**
  * Sección hero principal de la página de inicio de PagoIA.
@@ -45,17 +46,17 @@ export function HeroSection() {
             ref={taglineRef}
             className="text-xs uppercase tracking-[0.5em] text-cyan-300"
           >
-            Pago IA para Mexico
+            Pago de servicios en México
           </p>
 
           <h1
             ref={titleRef}
             className="text-5xl md:text-7xl font-bold text-foreground leading-tight hero-title-3d"
           >
-            Gestion de Pagos
+            Tus servicios,
             <br />
             <span className="bg-gradient-to-r from-cyan-300 via-sky-300 to-blue-400 bg-clip-text text-transparent">
-              Tenemos Todo
+              sin sorpresas.
             </span>
           </h1>
 
@@ -63,8 +64,8 @@ export function HeroSection() {
             ref={subtitleRef}
             className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto font-light"
           >
-            Maximiza tu control, minimiza tus costos y optimiza tus pagos con
-            inteligencia artificial
+            Luz, agua, gas e internet en un solo panel. PagoIA te dice cuánto
+            vas a pagar y te avisa antes de cada vencimiento.
           </p>
 
           <div
@@ -77,7 +78,7 @@ export function HeroSection() {
               className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-lg px-8 font-semibold text-base h-12"
             >
               <Link href="/auth/register">
-                Comenzar Ahora
+                Crear cuenta gratis
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
@@ -87,7 +88,7 @@ export function HeroSection() {
               size="lg"
               className="rounded-lg px-8 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 font-semibold text-base h-12"
             >
-              <Link href="#caracteristicas">Explorar</Link>
+              <Link href="#como-funciona">Ver cómo funciona</Link>
             </Button>
           </div>
         </div>
@@ -105,8 +106,8 @@ export function HeroSection() {
             <div className="hero-card hero-card-main">
               <div className="relative h-full w-full overflow-hidden rounded-xl border border-cyan-300/25 bg-slate-950/60 p-4">
                 <Image
-                  src="/PAGO_IA.png"
-                  alt="Panel de pagos de PagoIA"
+                  src="/screens/dashboard.webp"
+                  alt="Panel de PagoIA con pagos, vencimientos y pronóstico de gastos"
                   fill
                   className="object-cover opacity-90"
                   priority
@@ -114,10 +115,10 @@ export function HeroSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 text-left">
                   <p className="text-xs uppercase tracking-[0.2em] text-cyan-300/90">
-                    Control total
+                    Todo en un panel
                   </p>
                   <p className="mt-1 text-lg font-semibold text-white">
-                    Pagos en tiempo real con analitica inteligente
+                    Pagos, vencimientos y pronóstico de gastos
                   </p>
                 </div>
               </div>
@@ -126,48 +127,33 @@ export function HeroSection() {
             <div className="hero-card hero-card-side">
               <div className="h-full w-full rounded-xl border border-cyan-300/20 bg-slate-950/70 p-5 backdrop-blur-sm">
                 <p className="text-xs uppercase tracking-[0.2em] text-cyan-300/80">
-                  Metodo principal
+                  Método de pago
                 </p>
                 <p className="mt-2 text-xl font-semibold text-white">
-                  Tarjeta credito o debito
+                  Tarjeta de crédito o débito
                 </p>
                 <p className="mt-2 text-sm text-slate-300">
-                  Procesamiento inmediato con confirmacion segura y recibo digital.
+                  Cobro con Stripe Checkout y comprobante en PDF al instante.
                 </p>
                 <div className="mt-4 flex items-center gap-3 text-xs text-cyan-100">
                   <CreditCard className="h-4 w-4 text-cyan-300" />
-                  100% Stripe Checkout
+                  Pago seguro con Stripe
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Panel informativo derecho */}
+          {/* Así funciona: loop del recibo (sustituye al video del hero) */}
           <div
+            id="como-funciona"
             ref={panelRef}
-            className="rounded-2xl border border-cyan-500/20 bg-card/40 p-6 backdrop-blur-sm tilt-panel"
+            className="scroll-mt-24 rounded-2xl border border-cyan-500/20 bg-card/40 p-6 backdrop-blur-sm tilt-panel"
           >
-            <h3 className="text-2xl font-semibold text-foreground">
-              Alta de usuarios lista
-            </h3>
-            <p className="mt-3 text-muted-foreground">
-              Registro por correo y acceso con Google activos. Flujo de
-              autenticacion preparado para dominio propio.
+            <h3 className="text-2xl font-semibold text-foreground">Así funciona</h3>
+            <p className="mt-2 text-muted-foreground">
+              Tómale foto a tu recibo, revisa lo que capturamos y págalo sin salir de la app.
             </p>
-            <div className="mt-6 space-y-3 text-sm text-slate-200">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-cyan-400" />
-                Confirmacion de sesion y rutas protegidas
-              </div>
-              <div className="flex items-center gap-2">
-                <Cpu className="h-4 w-4 text-cyan-400" />
-                Checkout de Stripe adaptable a cualquier host
-              </div>
-              <div className="flex items-center gap-2">
-                <BellRing className="h-4 w-4 text-cyan-400" />
-                Alertas y recordatorios inteligentes en tiempo real
-              </div>
-            </div>
+            <ReceiptLoop className="mt-4" />
           </div>
         </div>
       </div>

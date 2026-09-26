@@ -2,6 +2,7 @@
 
 import { useId } from 'react'
 import { cn } from '@/lib/utils'
+import { LogoAnimated } from './logo-animated'
 
 type LogoProps = {
   /** "full" muestra símbolo + nombre; "mark" solo el símbolo. */
@@ -9,6 +10,8 @@ type LogoProps = {
   className?: string
   markClassName?: string
   wordmarkClassName?: string
+  /** Reproduce la animación del símbolo una vez al montar. */
+  animated?: boolean
 }
 
 /** Símbolo de PagoIA: una P con borde de recibo y la chispa de la IA. */
@@ -38,18 +41,24 @@ export function LogoMark({ className }: { className?: string }) {
   )
 }
 
-export function Logo({ variant = 'full', className, markClassName, wordmarkClassName }: LogoProps) {
+export function Logo({ variant = 'full', className, markClassName, wordmarkClassName, animated = false }: LogoProps) {
+  const mark = animated ? (
+    <LogoAnimated className={cn('h-10 w-10 shrink-0', markClassName)} />
+  ) : (
+    <LogoMark className={markClassName} />
+  )
+
   if (variant === 'mark') {
     return (
       <span className={cn('inline-flex', className)} role="img" aria-label="PagoIA">
-        <LogoMark className={markClassName} />
+        {mark}
       </span>
     )
   }
 
   return (
     <span className={cn('inline-flex items-center gap-2', className)}>
-      <LogoMark className={markClassName} />
+      {mark}
       <span className={cn('font-display text-xl font-extrabold tracking-tight text-foreground', wordmarkClassName)}>
         Pago<span className="text-primary">IA</span>
       </span>
